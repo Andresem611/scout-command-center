@@ -8,13 +8,13 @@
 
 | Branch | Target | Prospected | Contacted | Replied | Negotiating | Live | Gap |
 |--------|--------|------------|-----------|---------|-------------|------|-----|
-| Mom Influencers (IG) | 30 | **15** | 0 | 0 | 0 | 0 | **15** |
-| Mom Influencers (TT/YT) | 15 | 0 | 0 | 0 | 0 | 0 | 15 |
-| Mom Blogs | 15 | **1** | 0 | 0 | 0 | 0 | **14** |
-| Homeschool Influencers (AZ) | 15 | 0 | 0 | 0 | 0 | 0 | 15 |
-| Homeschool Blogs (AZ) | 10 | 0 | 0 | 0 | 0 | 0 | 10 |
-| Homeschool Expansion | 10 | 0 | 0 | 0 | 0 | 0 | 10 |
-| **TOTAL** | **95** | **16** | **0** | **0** | **0** | **1** | **79** |
+| Mom Influencers (IG) | 30 | **22** | 0 | 0 | 0 | 0 | **8** |
+| Mom Influencers (TT/YT) | 15 | **2** | 0 | 0 | 0 | 0 | **13** |
+| Mom Blogs | 15 | **3** | 0 | 0 | 0 | 0 | **12** |
+| Homeschool Influencers (AZ) | 15 | **3** | 0 | 0 | 0 | 0 | **12** |
+| Homeschool Blogs (AZ) | 10 | 0 | 0 | 0 | 0 | 0 | **10** |
+| Homeschool Expansion | 10 | 0 | 0 | 0 | 0 | 0 | **10** |
+| **TOTAL** | **95** | **30** | **0** | **0** | **0** | **1** | **65** |
 
 *Live partner: Audrey Mora (since Feb 23)*
 
@@ -87,6 +87,34 @@
 4. **Valentina Tamayo** (85) — 25K, info@mvtrends.com
 5. **Devon Kirby** (85) — 15-50K, hello@momapprovedmiami.com
 
+## Wave 2 Prospects (NYC + LA + AZ — In Progress)
+
+### NYC Mom Influencers/Bloggers
+| Name | Handle | Platform | Followers | Email | Score | Status |
+|------|--------|----------|-----------|-------|-------|--------|
+| Kim | @beautyandthebump | Instagram/TikTok | — | Kim@beautyandthebumpnyc.com | 85 | Prospected |
+| Monica | @nyctechmommy | Blog/IG | — | monica@nyctechmommy.com | 82 | Prospected |
+
+### LA Mom Influencers  
+| Name | Handle | Platform | Followers | Email | Score | Status |
+|------|--------|----------|-----------|-------|-------|--------|
+| Alex Morgan | @alexmorgan13 | Instagram | 9M | — | 95 | Prospected |
+| Madison Fisher | @madisonbfisher | Instagram | 2M | info@jakerosentertainment.com | 92 | Prospected |
+| Yasmine Lopez | @theyaslopez | Instagram | 1M | — | 88 | Prospected |
+| Jana Kramer | @kramergirl | Instagram | 2M | Kathryn@kvwmanagement.com | 90 | Prospected |
+| Korie Robertson | @korierobertson | Instagram | 2M | — | 85 | Prospected |
+| Maryse Mizanin | @marysemizanin | Instagram | 2M | — | 82 | Prospected |
+| Jinger Vuolo | @jingervuolo | Instagram | 1M | TeamJingerVuolo@gersh.com | 80 | Prospected |
+| Carly Anderson | @lipglossandcrayons | Instagram | — | — | 78 | Prospected |
+| Angela Kim | @mommydiary | Instagram/Blog | — | — | 75 | Prospected |
+
+### Arizona Homeschool Influencers
+| Name | Handle | Platform | Followers | Email | Score | Status |
+|------|--------|----------|-----------|-------|-------|--------|
+| Holy Family Home Educators | — | Blog/Org | — | Contact via hfhetucson.org | 85 | Prospected |
+| Tucson Youth Music | @homeschoolhall | Instagram | — | — | 78 | Prospected |
+| Erin Kerry | @erinbkerry | Instagram/Podcast | — | — | 82 | Prospected |
+
 ---
 
-*Next: Draft outreach for top prospects → Morning Batch for approval*
+*Pipeline filling in progress. Tomorrow: 8 AM Morning Batch with all outreach drafts.*
