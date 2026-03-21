@@ -149,7 +149,43 @@ if 'interactions' not in st.session_state:
     st.session_state.interactions = []
 
 if 'blog_forms' not in st.session_state:
-    st.session_state.blog_forms = []
+    # Sample blog form for demonstration
+    st.session_state.blog_forms = [
+        {
+            'id': 'blog_001',
+            'blog_name': 'NYC Tech Mommy',
+            'url': 'https://www.nyctechmommy.com/contact-us/',
+            'author_name': 'Monica',
+            'city': 'NYC',
+            'branch': 'Mom Blogs',
+            'status': 'manual_needed',
+            'subject': 'Partnership opportunity — music education for your readers',
+            'message': """Hi Monica,
+
+This is Keri! I'm a pianist, music teacher, and co-founder of Thoven — an all-in-one music education platform where families can find verified, background-checked teachers trained at top schools like The Juilliard School.
+
+I just read your post about "Helping Kids Find Their Passion" and loved how you emphasized giving children diverse experiences to discover what resonates with them. That's exactly why we built Thoven.
+
+After years of teaching and working closely with families, I've met so many parents who wanted music lessons for their children but feel unsure where to begin or how to stay connected to their child's progress.
+
+With Thoven, parents and students can:
+- Feel confident knowing every teacher is background-checked and verified
+- Seamlessly schedule and pay for lessons in one place (secured with Stripe)
+- Access a personalized, gamified dashboard to track progress and motivate practice
+- View lesson notes, assignments, and real-time progress updates
+
+We work with teachers trained at The Juilliard School, Manhattan School of Music, Eastman School of Music and more.
+
+I'd love to explore a partnership where your NYC mom readers could get exclusive access to music lessons. Would you be open to a quick chat?
+
+Looking forward to connecting,
+Keri Erten
+Co-Founder, Thoven
+thoven.com""",
+            'research_notes': 'Tech + family lifestyle blog. Recent post about helping kids find passion. PR-friendly with media kit.',
+            'found_at': datetime.now().isoformat()
+        }
+    ]
 
 # Helper function for blog form cards
 def _render_blog_form_card(form, show_copy=False):
