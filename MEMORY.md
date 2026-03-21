@@ -143,6 +143,38 @@ This applies to EVERYTHING — first outreach, follow-ups, replies. No exception
 
 4. **Cross-reference:** search "[influencer name] contact" or "[influencer name] email" to find contact info from press pages, collaboration pages, or bio link sites
 
+### Blog Contact Form Protocol
+
+When finding a mom blog or homeschool blog with a contact form (no direct email):
+
+**Step 1: Research the blog first**
+- Read 2-3 recent posts to understand content and audience
+- Note author's name, topics, city/region
+- Check for media kit, partnerships page, "work with me" page
+
+**Step 2: Fill out the contact form via browser**
+- Fields to use:
+  - Name: Keri Erten
+  - Email: keri@agentmail.to
+  - Subject: "Partnership opportunity — music education for your readers"
+  - Message: Use email template, personalized with reference to a specific post read
+
+**Step 3: If form fails (CAPTCHA, login wall, broken form)**
+- Don't retry repeatedly
+- Save to pipeline as "Prospected — manual form needed"
+- Show in Morning Batch: "📝 MANUAL FORM: [Blog name] | [URL] | [Pre-written message]"
+- Andres fills manually in 30 seconds
+
+**Step 4: After submission**
+- Log: Blog name, URL, date, status = Contacted
+- Follow-up: If no reply in 7 days, search for alternate contact (email or social)
+- Track what works: Response rates by form type, blog size, niche, region
+
+**Command Center "Blog Forms" Section**
+- Cards show: blog name, URL, pre-written message
+- Status: ✅ Auto-submitted OR 📝 Manual needed
+- "Copy Message" button for quick manual paste
+
 ---
 
 ## Heartbeat (Every 30 Minutes)
