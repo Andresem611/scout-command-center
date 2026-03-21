@@ -148,13 +148,70 @@ if 'replies' not in st.session_state:
 if 'interactions' not in st.session_state:
     st.session_state.interactions = []
 
+if 'blog_forms' not in st.session_state:
+    st.session_state.blog_forms = []
+
+# Helper function for blog form cards
+def _render_blog_form_card(form, show_copy=False):
+    """Render a blog form card"""
+    status_emoji = "✅" if form.get('status') == 'auto_submitted' else "📝" if form.get('status') == 'manual_needed' else "📤"
+    status_color = "#22c55e" if form.get('status') == 'auto_submitted' else "#f59e0b" if form.get('status') == 'manual_needed' else "#3b82f6"
+    
+    with st.container():
+        st.markdown(f"""
+        <div class="prospect-card" style="border-left: 4px solid {status_color};">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h3 style="margin: 0; color: #fff;">{status_emoji} {form.get('blog_name', 'Unknown Blog')}</h3>
+                    <p style="margin: 5px 0; color: #888;">
+                        {form.get('city', 'Unknown City')} • {form.get('branch', 'Unknown Branch')}
+                    </p>
+                </div>
+                <span style="background: {status_color}; color: #000; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem;">
+                    {form.get('status', 'unknown').replace('_', ' ').upper()}
+                </span>
+            </div>
+            <hr style="border-color: #333; margin: 15px 0;">
+            <p style="color: #888; margin-bottom: 5px;"><b>URL:</b> <a href="{form.get('url', '#')}" target="_blank" style="color: #3b82f6;">{form.get('url', 'N/A')}</a></p>
+            <p style="color: #888; margin-bottom: 5px;"><b>Author:</b> {form.get('author_name', 'Unknown')}</p>
+            <p style="color: #888; margin-bottom: 5px;"><b>Research Notes:</b> {form.get('research_notes', 'No notes')}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Message preview
+        with st.expander("📧 View Pre-written Message"):
+            st.markdown(f"**Subject:** {form.get('subject', 'N/A')}")
+            st.text_area("Message", form.get('message', 'No message'), height=150, disabled=True, key=f"msg_{form.get('id', '0')}")
+            
+            if show_copy:
+                if st.button("📋 Copy Message", key=f"copy_{form.get('id', '0')}", use_container_width=True):
+                    st.code(form.get('message', ''), language=None)
+                    st.success("Message ready to paste! Copy from the box above.")
+        
+        # Actions for manual forms
+        if form.get('status') == 'manual_needed':
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Mark as Submitted", key=f"mark_{form.get('id', '0')}", use_container_width=True):
+                    form['status'] = 'manually_submitted'
+                    form['submitted_at'] = datetime.now().isoformat()
+                    st.success("Marked as submitted! 7-day follow-up scheduled.")
+                    st.rerun()
+            with col2:
+                if st.button("⏭️ Skip", key=f"skip_form_{form.get('id', '0')}", use_container_width=True):
+                    form['status'] = 'skipped'
+                    st.info("Form skipped.")
+                    st.rerun()
+        
+        st.markdown("---")
+
 # Sidebar navigation
 st.sidebar.title("🎯 Scout Command Center")
 st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
     "Navigate",
-    ["📊 Dashboard", "☀️ Morning Batch", "👥 Pipeline", "📥 Inbox", "🧠 Knowledge Base"]
+    ["📊 Dashboard", "☀️ Morning Batch", "📝 Blog Forms", "👥 Pipeline", "📥 Inbox", "🧠 Knowledge Base"]
 )
 
 st.sidebar.markdown("---")
@@ -370,6 +427,88 @@ elif page == "☀️ Morning Batch":
                                 st.rerun()
                 
                 st.markdown("---")
+
+# ========== BLOG FORMS VIEW ==========
+elif page == "📝 Blog Forms":
+    st.title("📝 Blog Forms")
+    st.markdown("Contact forms for mom blogs and homeschool blogs. Auto-submitted when possible, flagged for manual when blocked.")
+    st.markdown("---")
+    
+    # Stats
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        total_forms = len(st.session_state.blog_forms)
+        st.metric("Total Forms", total_forms)
+    
+    with col2:
+        auto_submitted = len([f for f in st.session_state.blog_forms if f.get('status') == 'auto_submitted'])
+        st.metric("✅ Auto-Submitted", auto_submitted)
+    
+    with col3:
+        manual_needed = len([f for f in st.session_state.blog_forms if f.get('status') == 'manual_needed'])
+        st.metric("📝 Manual Needed", manual_needed)
+    
+    st.markdown("---")
+    
+    # Filter tabs
+    tab1, tab2, tab3 = st.tabs(["All Forms", "📝 Manual Needed", "✅ Submitted"])
+    
+    with tab1:
+        if not st.session_state.blog_forms:
+            st.info("No blog forms yet. Scout will add them here when blogs are found without direct email contact.")
+            st.markdown("""
+            **How it works:**
+            1. Scout finds mom/homeschool blogs via search
+            2. Reads 2-3 posts to understand content & audience
+            3. Checks for media kit, partnerships, "work with me" pages
+            4. Attempts to fill contact form via browser
+            5. **Auto-submitted:** ✅ Logged here, 7-day follow-up scheduled
+            6. **Manual needed:** 📝 Shown here with pre-written message
+            """)
+        else:
+            for form in st.session_state.blog_forms:
+                _render_blog_form_card(form)
+    
+    with tab2:
+        manual_forms = [f for f in st.session_state.blog_forms if f.get('status') == 'manual_needed']
+        if not manual_forms:
+            st.success("🎉 No manual forms pending! All caught up.")
+        else:
+            st.warning(f"**{len(manual_forms)} forms** need your attention")
+            for form in manual_forms:
+                _render_blog_form_card(form, show_copy=True)
+    
+    with tab3:
+        submitted_forms = [f for f in st.session_state.blog_forms if f.get('status') in ['auto_submitted', 'manually_submitted']]
+        if not submitted_forms:
+            st.info("No forms submitted yet.")
+        else:
+            for form in submitted_forms:
+                _render_blog_form_card(form)
+    
+    # Response tracking section
+    st.markdown("---")
+    st.subheader("📊 Response Tracking")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**What to track:**")
+        st.markdown("""
+        - Which blogs respond to form submissions vs ignore
+        - \"Work with me\" pages vs generic contact forms
+        - Blog size, niche, region patterns
+        - 7-day response rates
+        """)
+    
+    with col2:
+        st.markdown("**Current patterns:**")
+        if st.session_state.blog_forms:
+            responded = len([f for f in st.session_state.blog_forms if f.get('response_received')])
+            st.metric("Response Rate", f"{(responded/max(len(st.session_state.blog_forms),1)*100):.0f}%")
+        else:
+            st.info("Awaiting data...")
 
 # ========== PIPELINE VIEW ==========
 elif page == "👥 Pipeline":
