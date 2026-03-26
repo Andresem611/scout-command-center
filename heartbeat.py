@@ -25,6 +25,37 @@ def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
+def update_agent_status(data, status="active", current_task="", error=None):
+    """Update Scout agent status in data file"""
+    if 'agent_status' not in data:
+        data['agent_status'] = {}
+    
+    agent_status = data['agent_status']
+    agent_status['last_heartbeat'] = datetime.now().isoformat()
+    agent_status['status'] = status
+    agent_status['current_task'] = current_task
+    agent_status['session_uptime'] = agent_status.get('session_start', datetime.now().isoformat())
+    
+    # Activity log (keep last 50 entries)
+    if 'activity_log' not in agent_status:
+        agent_status['activity_log'] = []
+    
+    if current_task:
+        agent_status['activity_log'].insert(0, {
+            'time': datetime.now().isoformat(),
+            'task': current_task
+        })
+        agent_status['activity_log'] = agent_status['activity_log'][:50]
+    
+    if error:
+        agent_status['last_error'] = {
+            'time': datetime.now().isoformat(),
+            'message': str(error)
+        }
+    
+    data['agent_status'] = agent_status
+    return data
+
 def check_approvals():
     """Check for approved drafts in the data file"""
     data = load_data()
@@ -89,12 +120,21 @@ def main():
     log("Scout Heartbeat Starting")
     log("="*60)
     
+    data = load_data()
+    
+    # Update agent status at start
+    data = update_agent_status(data, status="active", current_task="Checking pipeline")
+    save_data(data)
+    
     # Check for approved drafts
     approved, data = check_approvals()
     log(f"Found {len(approved)} approved drafts")
     
     if approved:
         log(f"Processing {len(approved)} approved drafts...")
+        data = update_agent_status(data, status="active", current_task=f"Sending {len(approved)} approved emails")
+        save_data(data)
+        
         for prospect in approved:
             email = prospect.get('email')
             if not email or '@' not in email:
@@ -114,6 +154,7 @@ def main():
             else:
                 log(f"❌ Failed to send to {prospect['name']}: {message}")
         
+        data = update_agent_status(data, status="active", current_task=f"Sent {len(approved)} emails")
         save_data(data)
         log(f"Updated data file with {len(approved)} sends")
     else:
@@ -125,6 +166,9 @@ def main():
     stats['contacted'] = len([p for p in data.get('prospects', []) if p.get('stage') == 'Contacted'])
     stats['replied'] = len([p for p in data.get('prospects', []) if p.get('stage') in ['Replied', 'Negotiating']])
     data['stats'] = stats
+    
+    # Final status update
+    data = update_agent_status(data, status="idle", current_task="Waiting for next check")
     save_data(data)
     
     log(f"Stats: {stats['total_prospects']} prospects, {stats['contacted']} contacted, {stats['replied']} replied")

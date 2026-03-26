@@ -90,6 +90,55 @@ st.sidebar.markdown(f"Last updated: {data.get('metadata', {}).get('last_updated'
 if page == "📊 Dashboard":
     st.title("📊 Dashboard")
     
+    # AGENT STATUS PANEL
+    agent_status = data.get('agent_status', {})
+    last_heartbeat = agent_status.get('last_heartbeat', '')
+    current_task = agent_status.get('current_task', 'Unknown')
+    status = agent_status.get('status', 'unknown')
+    
+    # Calculate time since last heartbeat
+    time_since = "—"
+    status_color = "#ef4444"  # red
+    status_dot = "🔴"
+    
+    if last_heartbeat:
+        try:
+            last_dt = datetime.fromisoformat(last_heartbeat.replace('Z', '+00:00'))
+            now = datetime.now(last_dt.tzinfo) if last_dt.tzinfo else datetime.now()
+            diff = (now - last_dt).total_seconds()
+            
+            if diff < 300:  # < 5 min
+                time_since = f"{int(diff//60)}m ago" if diff >= 60 else "Just now"
+                status_color = "#22c55e"  # green
+                status_dot = "🟢"
+            elif diff < 1800:  # < 30 min
+                time_since = f"{int(diff//60)}m ago"
+                status_color = "#f59e0b"  # yellow
+                status_dot = "🟡"
+            else:
+                time_since = f"{int(diff//3600)}h ago"
+                status_color = "#ef4444"  # red
+                status_dot = "🔴"
+        except:
+            time_since = "Unknown"
+    
+    # Agent status card
+    st.markdown(f"""
+    <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid {status_color};">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="margin: 0; color: #fff;">🤖 Scout Agent {status_dot}</h3>
+                <p style="margin: 5px 0 0 0; color: #888;">Last seen: <span style="color: {status_color};">{time_since}</span></p>
+            </div>
+            <div style="text-align: right;">
+                <p style="margin: 0; color: #666; font-size: 0.85rem;">Current Task</p>
+                <p style="margin: 5px 0 0 0; color: #fff; font-weight: 500;">{current_task}</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Quick stats row
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
@@ -128,6 +177,25 @@ if page == "📊 Dashboard":
             <p style="color: #666;">Audrey Mora</p>
         </div>
         """, unsafe_allow_html=True)
+    
+    # Activity Log (collapsible)
+    with st.expander("📜 Recent Activity", expanded=False):
+        activity_log = agent_status.get('activity_log', [])
+        if activity_log:
+            for entry in activity_log[:10]:
+                task_time = entry.get('time', '')
+                task_desc = entry.get('task', '')
+                if task_time:
+                    try:
+                        dt = datetime.fromisoformat(task_time.replace('Z', '+00:00'))
+                        time_str = dt.strftime("%H:%M")
+                    except:
+                        time_str = "—"
+                else:
+                    time_str = "—"
+                st.markdown(f"**{time_str}** — {task_desc}")
+        else:
+            st.markdown("*No recent activity logged*")
     
     st.markdown("---")
     
