@@ -12,7 +12,7 @@ import urllib.error
 from datetime import datetime
 
 DATA_FILE = "/root/.openclaw/workspace/scout_data.json"
-DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "http://localhost:3000/api/status")
+DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-v2.vercel.app/api/status")
 
 def log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -71,14 +71,7 @@ def update_agent_status(data, status="active", current_task="", error=None):
             'time': datetime.now().isoformat(),
             'message': str(error)
         }
-    
-    data['agent_status'] = agent_status
-    return data
-        agent_status['last_error'] = {
-            'time': datetime.now().isoformat(),
-            'message': str(error)
-        }
-    
+
     data['agent_status'] = agent_status
     return data
 
@@ -141,6 +134,46 @@ def send_via_agentmail(to_email, subject, body):
     
     return True, "Email queued (AgentMail API not yet implemented)"
 
+def post_to_dashboard(status, current_task, version="2.0.0"):
+    """
+    POST agent status to Vercel dashboard API
+    Returns: (success: bool, message: str)
+    """
+    try:
+        payload = json.dumps({
+            "status": status,
+            "currentTask": current_task,
+            "version": version
+        }).encode('utf-8')
+        
+        req = urllib.request.Request(
+            DASHBOARD_API,
+            data=payload,
+            headers={
+                'Content-Type': 'application/json',
+                'Content-Length': len(payload)
+            },
+            method='POST'
+        )
+        
+        with urllib.request.urlopen(req, timeout=10) as response:
+            result = json.loads(response.read().decode('utf-8'))
+            log(f"✅ Dashboard POST success: {result}")
+            return True, "Status posted to dashboard"
+            
+    except urllib.error.HTTPError as e:
+        error_msg = f"HTTP {e.code}: {e.reason}"
+        log(f"❌ Dashboard POST failed: {error_msg}")
+        return False, error_msg
+    except urllib.error.URLError as e:
+        error_msg = f"URL Error: {e.reason}"
+        log(f"❌ Dashboard POST failed: {error_msg}")
+        return False, error_msg
+    except Exception as e:
+        error_msg = f"Exception: {str(e)}"
+        log(f"❌ Dashboard POST failed: {error_msg}")
+        return False, error_msg
+
 def main():
     log("="*60)
     log("Scout Heartbeat Starting")
@@ -151,6 +184,7 @@ def main():
     # Update agent status at start
     data = update_agent_status(data, status="active", current_task="Checking pipeline")
     save_data(data)
+    post_to_dashboard("active", "Checking pipeline")
     
     # Check for approved drafts
     approved, data = check_approvals()
@@ -160,6 +194,7 @@ def main():
         log(f"Processing {len(approved)} approved drafts...")
         data = update_agent_status(data, status="active", current_task=f"Sending {len(approved)} approved emails")
         save_data(data)
+        post_to_dashboard("active", f"Sending {len(approved)} approved emails")
         
         for prospect in approved:
             email = prospect.get('email')
@@ -182,6 +217,7 @@ def main():
         
         data = update_agent_status(data, status="active", current_task=f"Sent {len(approved)} emails")
         save_data(data)
+        post_to_dashboard("active", f"Sent {len(approved)} emails")
         log(f"Updated data file with {len(approved)} sends")
     else:
         log("No approved drafts to send")
@@ -196,6 +232,7 @@ def main():
     # Final status update
     data = update_agent_status(data, status="idle", current_task="Waiting for next check")
     save_data(data)
+    post_to_dashboard("idle", "Waiting for next check")
     
     log(f"Stats: {stats['total_prospects']} prospects, {stats['contacted']} contacted, {stats['replied']} replied")
     log("Heartbeat complete")

@@ -1,19 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
+@theme {
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
