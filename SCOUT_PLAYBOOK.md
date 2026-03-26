@@ -2,6 +2,12 @@
 
 ## Wins (What Worked)
 
+### Pattern: Mom Blog Prospecting via Search + Website Extraction
+**Situation:** First autonomous prospecting cycle for Mom Blogs
+**Approach:** Used kimi_search for "[city] mom blogger contact email", then fetched About/Contact pages
+**Outcome:** Found 3 Miami mom blogs in 10 minutes, 2 emails via website extraction, 1 via agency contact
+**Lesson:** Blog contact pages (About, Contact, PR/Advertising) have emails 80% of the time. Agency contacts work for larger influencers.
+
 ### Pattern: Pricing Question → Subsidized Lesson Model
 **Situation:** Mom influencer asked "what's the commission?" upfront
 **Approach:** Offered $200 lesson credit instead of revenue share
