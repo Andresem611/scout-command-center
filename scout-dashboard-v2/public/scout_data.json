@@ -1,9 +1,46 @@
 {
   "metadata": {
-    "last_updated": "2026-03-27T03:15:11.075542",
-    "version": "1.0"
-  },
+    "last_updated": "2026-03-27T07:00:00Z",
+    "version": "1.1",
+    "updated_by": "scout-autonomous-cycle"
+  },,
   "prospects": [
+    {
+      "name": "Ana (Cleverly Me)",
+      "handle": "cleverlyme",
+      "followers": 15000,
+      "city": "Miami",
+      "email": "Ana@CleverlyMe.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "Email found on contact page + established blog with brand partnerships"
+    },
+    {
+      "name": "Laura Scott",
+      "handle": "laurascottandco",
+      "followers": 45000,
+      "city": "Miami",
+      "email": "",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 3,
+      "scoreReason": "Miami doctor mom blogger, Parents magazine feature - need to find email"
+    },
+    {
+      "name": "Natalie Lesnefsky",
+      "handle": "athomewithnatalie",
+      "followers": 32000,
+      "city": "Miami",
+      "email": "",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 3,
+      "scoreReason": "DIY/Party planning blogger - need to find email"
+    },
     {
       "name": ":---",
       "handle": ":---",

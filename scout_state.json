@@ -1,51 +1,53 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-27T06:30:00Z",
+  "last_heartbeat": "2026-03-27T07:00:00Z",
   "current_task": {
-    "type": "prospecting",
-    "target": "Mom Blogs - Miami",
-    "started_at": "2026-03-27T06:15:00Z",
+    "type": "drafting",
+    "target": "new_blog_prospects",
+    "started_at": "2026-03-27T07:00:00Z",
     "retries": 0
   },
   "task_queue": [
     {
       "priority": 1,
-      "type": "prospecting",
-      "target": "Mom Blogs - Miami",
+      "type": "drafting",
+      "target": "Ana (Cleverly Me)",
       "status": "active",
       "retries": 0
     },
     {
       "priority": 2,
       "type": "drafting",
-      "target": "new_prospects_with_emails",
+      "target": "Laura Scott",
       "status": "pending"
     },
     {
       "priority": 3,
-      "type": "blog_forms",
-      "target": "pending_submissions",
+      "type": "drafting",
+      "target": "Natalie Lesnefsky",
       "status": "pending"
     }
   ],
   "retry_tracker": {
     "prospecting": {
       "Mom Blogs - Miami": {
-        "attempts": 0,
-        "last_attempt": null,
-        "status": "active"
+        "attempts": 1,
+        "last_attempt": "2026-03-27T07:00:00Z",
+        "status": "completed",
+        "found": 3
       }
     },
-    "blog_forms": {}
+    "blog_forms": {},
+    "drafting": {}
   },
   "stats_this_session": {
-    "prospects_found": 0,
+    "prospects_found": 3,
     "drafts_created": 0,
     "emails_sent": 0,
     "replies_received": 0,
     "blog_forms_submitted": 0
   },
   "blockers": [],
-  "next_expansion_target": null
+  "next_expansion_target": "Mom Blogs - LA"
 }
