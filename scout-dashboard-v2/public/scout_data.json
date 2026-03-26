@@ -1,8 +1,9 @@
 {
   "metadata": {
-    "last_updated": "2026-03-27T07:30:00Z",
-    "version": "1.2",
-    "updated_by": "scout-autonomous-cycle"
+    "last_updated": "2026-03-27T07:45:00Z",
+    "version": "1.3",
+    "updated_by": "scout-autonomous-cycle",
+    "contacted_today": 3
   },
   "prospects": [
     {
@@ -11,11 +12,12 @@
       "followers": 15000,
       "city": "Miami",
       "email": "Ana@CleverlyMe.com",
-      "stage": "Prospected",
+      "stage": "Contacted",
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Email found on contact page + established blog with brand partnerships"
+      "scoreReason": "Email found on contact page + established blog with brand partnerships",
+      "contacted_at": "2026-03-27T07:45:00Z"
     },
     {
       "name": "Laura Scott",
@@ -23,11 +25,12 @@
       "followers": 160000,
       "city": "Miami",
       "email": "claudia@thedigitalbrandarchitects.com",
-      "stage": "Prospected",
+      "stage": "Contacted",
       "type": "Micro",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Harvard MD, dermatologist, 160K IG, Parents mag feature - managed by Digital Brand Architects"
+      "scoreReason": "Harvard MD, dermatologist, 160K IG, Parents mag feature - managed by Digital Brand Architects",
+      "contacted_at": "2026-03-27T07:45:00Z"
     },
     {
       "name": "Natalie Lesnefsky",
@@ -35,11 +38,12 @@
       "followers": 32000,
       "city": "Miami",
       "email": "partnerships@athomewithnatalie.com",
-      "stage": "Prospected",
+      "stage": "Contacted",
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "DIY/party planning blogger, 6 kids, active partnerships email found"
+      "scoreReason": "DIY/party planning blogger, 6 kids, active partnerships email found",
+      "contacted_at": "2026-03-27T07:45:00Z"
     },
     {
       "name": ":---",

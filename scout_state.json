@@ -1,25 +1,25 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-27T07:30:00Z",
+  "last_heartbeat": "2026-03-27T07:45:00Z",
   "current_task": {
-    "type": "complete",
-    "target": "cycle_1_complete",
-    "started_at": "2026-03-27T07:30:00Z",
+    "type": "prospecting",
+    "target": "Mom Blogs - LA",
+    "started_at": "2026-03-27T07:45:00Z",
     "retries": 0
   },
   "task_queue": [
     {
       "priority": 1,
-      "type": "awaiting_approval",
-      "target": "draft_queue",
-      "status": "ready",
-      "count": 3
+      "type": "prospecting",
+      "target": "Mom Blogs - LA",
+      "status": "active",
+      "retries": 0
     },
     {
       "priority": 2,
-      "type": "prospecting",
-      "target": "Mom Blogs - LA",
+      "type": "drafting",
+      "target": "la_mom_blogs",
       "status": "pending"
     }
   ],
@@ -34,21 +34,31 @@
       "Mom Blogs - LA": {
         "attempts": 0,
         "last_attempt": null,
-        "status": "queued"
+        "status": "active"
       }
     },
     "blog_forms": {},
     "drafting": {
-      "completed": 3
+      "completed": 3,
+      "approved": 3,
+      "pending_send": 3
     }
   },
   "stats_this_session": {
     "prospects_found": 3,
     "drafts_created": 3,
+    "drafts_approved": 3,
     "emails_sent": 0,
+    "emails_pending_agentmail": 3,
     "replies_received": 0,
     "blog_forms_submitted": 0
   },
-  "blockers": [],
+  "blockers": [
+    {
+      "type": "infrastructure",
+      "description": "AgentMail API not configured — 3 approved emails waiting to send",
+      "workaround": "Manual send via your email client, or configure AgentMail"
+    }
+  ],
   "next_expansion_target": "Mom Blogs - LA"
 }
