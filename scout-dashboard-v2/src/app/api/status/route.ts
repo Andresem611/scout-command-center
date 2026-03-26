@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-const DATA_FILE = join(process.cwd(), '..', 'scout_data.json');
+const DATA_FILE = join(process.cwd(), 'public', 'scout_data.json');
 
 function loadData() {
   try {
