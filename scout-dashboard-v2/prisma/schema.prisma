@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model AgentStatus {
+  id              String   @id @default(cuid())
+  lastHeartbeat   DateTime @updatedAt
+  status          String   // active, idle, error
+  currentTask     String?
+  version         String   @default("1.0.0")
+  healthChecks    Json?    // { "2024-03-27": { checkedAt, status } }
+  activityLog     Json?    // [{ time, task }]
+  lastError       Json?    // { time, message }
+  createdAt       DateTime @default(now())
+}
+
+model Prospect {
+  id          String   @id @default(cuid())
+  name        String
+  handle      String
+  followers   Int
+  city        String
+  email       String?
+  stage       String   // Uncontacted, Prospected, Contacted, Replied, Negotiating, Declined
+  type        String   // Nano, Micro, Macro, Mega
+  branch      String   // Mom Influencers (IG), Mom Blogs, etc.
+  score       Int      @default(0)
+  draftStatus String?  // pending, approved, sent
+  lastContact DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Draft {
+  id          String   @id @default(cuid())
+  prospectId  String
+  subject     String
+  body        String
+  status      String   // pending, approved, sent
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
