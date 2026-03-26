@@ -12,7 +12,7 @@ import urllib.error
 from datetime import datetime
 
 DATA_FILE = "/root/.openclaw/workspace/scout_data.json"
-DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-v2.vercel.app/api/status")
+DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-v2-3hpvdq6ok-andres-3203s-projects.vercel.app/api/status")
 
 def log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
