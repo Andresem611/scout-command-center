@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """
 Scout Heartbeat Script
-Checks scout_data.json for approved drafts and sends them via AgentMail
+Checks for approved drafts and sends them via AgentMail
+Pings Next.js dashboard API with status updates
 """
 
 import json
 import os
+import urllib.request
+import urllib.error
 from datetime import datetime
 
 DATA_FILE = "/root/.openclaw/workspace/scout_data.json"
+DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "http://localhost:3000/api/status")
 
 def log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
