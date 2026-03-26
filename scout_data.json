@@ -1068,5 +1068,16 @@
     "replied": 0,
     "negotiating": 0,
     "live": 1
+  },
+  "agent_status": {
+    "last_heartbeat": "2026-03-27T01:15:41.405020",
+    "status": "active",
+    "current_task": "Dashboard initialized",
+    "activity_log": [
+      {
+        "time": "2026-03-27T01:15:41.405043",
+        "task": "Agent panel initialized"
+      }
+    ]
   }
 }
