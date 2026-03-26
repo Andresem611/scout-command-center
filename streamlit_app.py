@@ -91,10 +91,18 @@ st.sidebar.markdown(f"Last updated: {data.get('metadata', {}).get('last_updated'
 if page == "📊 Dashboard":
     st.title("📊 Dashboard")
     
+    # DEBUG: Verify new code is loaded
+    st.markdown("<span style='color:#333; font-size:0.7rem;'>v1.1.0-agent-panel</span>", unsafe_allow_html=True)
+    
     # DEBUG: Force fresh data load and show if agent_status exists
     st.cache_data.clear()
     data = load_data()
     prospects = data.get('prospects', [])
+    
+    # Show agent_status existence for debugging
+    has_agent_status = 'agent_status' in data
+    if not has_agent_status:
+        st.error("⚠️ agent_status not found in data - using defaults")
     
     # Recalculate stats with fresh data
     total_prospects = len(prospects)
@@ -108,6 +116,10 @@ if page == "📊 Dashboard":
     
     # AGENT STATUS PANEL
     agent_status = data.get('agent_status', {})
+    
+    # FORCE RENDER TEST - If you see this, the new code is running
+    st.success("✅ Agent panel code loaded")
+    
     last_heartbeat = agent_status.get('last_heartbeat', '')
     current_task = agent_status.get('current_task', 'Unknown')
     status = agent_status.get('status', 'unknown')
