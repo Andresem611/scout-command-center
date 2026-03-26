@@ -1,94 +1,88 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@vercel/postgres';
+import { readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
-// Initialize tables if they don't exist
-async function initTables(sql: any) {
+const DATA_FILE = join(process.cwd(), '..', 'scout_data.json');
+
+function loadData() {
   try {
-    await sql`CREATE TABLE IF NOT EXISTS agent_status (
-      id TEXT PRIMARY KEY,
-      status TEXT NOT NULL DEFAULT 'unknown',
-      "currentTask" TEXT,
-      version TEXT DEFAULT '1.0.0',
-      "lastHeartbeat" TIMESTAMP DEFAULT NOW(),
-      "createdAt" TIMESTAMP DEFAULT NOW()
-    )`;
-    await sql`CREATE TABLE IF NOT EXISTS activity_log (
-      id SERIAL PRIMARY KEY,
-      task TEXT NOT NULL,
-      "createdAt" TIMESTAMP DEFAULT NOW()
-    )`;
-    await sql`INSERT INTO agent_status (id, status, "currentTask", version)
-      VALUES ('scout', 'idle', 'Dashboard initialized', '2.0.0')
-      ON CONFLICT (id) DO NOTHING`;
-  } catch (e) {
-    console.log('Init error (may already exist):', e);
+    const content = readFileSync(DATA_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Failed to load scout_data.json:', error);
+    return { prospects: [], stats: {}, agent_status: {} };
+  }
+}
+
+function saveData(data: any) {
+  try {
+    writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Failed to save scout_data.json:', error);
   }
 }
 
 export async function POST(request: Request) {
-  const client = createClient();
-  await client.connect();
-  const sql = client.sql.bind(client);
   try {
     const body = await request.json();
-    const { status, currentTask, version = '1.0.0' } = body;
+    const { status, currentTask, version = '2.0.0' } = body;
 
-    await initTables(sql);
-
-    // Upsert agent status
-    await sql`
-      INSERT INTO agent_status (id, status, "currentTask", version, "lastHeartbeat")
-      VALUES ('scout', ${status}, ${currentTask}, ${version}, NOW())
-      ON CONFLICT (id) 
-      DO UPDATE SET 
-        status = ${status},
-        "currentTask" = ${currentTask},
-        version = ${version},
-        "lastHeartbeat" = NOW()
-    `;
-
-    // Log activity
+    const data = loadData();
+    
+    // Update agent status
+    if (!data.agent_status) {
+      data.agent_status = {};
+    }
+    
+    data.agent_status.status = status;
+    data.agent_status.currentTask = currentTask;
+    data.agent_status.version = version;
+    data.agent_status.lastHeartbeat = new Date().toISOString();
+    
+    // Add to activity log
+    if (!data.agent_status.activity_log) {
+      data.agent_status.activity_log = [];
+    }
+    
     if (currentTask) {
-      await sql`
-        INSERT INTO activity_log (task, "createdAt")
-        VALUES (${currentTask}, NOW())
-      `;
+      data.agent_status.activity_log.unshift({
+        task: currentTask,
+        time: new Date().toISOString()
+      });
+      // Keep last 50
+      data.agent_status.activity_log = data.agent_status.activity_log.slice(0, 50);
     }
 
-    await client.end();
+    saveData(data);
     return NextResponse.json({ success: true });
   } catch (error) {
-    await client.end();
     console.error('Status update error:', error);
     return NextResponse.json({ error: 'Failed to update status' }, { status: 500 });
   }
 }
 
 export async function GET() {
-  const client = createClient();
-  await client.connect();
-  const sql = client.sql.bind(client);
-  
   try {
-    await initTables(sql);
+    const data = loadData();
+    const agentStatus = data.agent_status || {};
     
-    const result = await sql`
-      SELECT * FROM agent_status WHERE id = 'scout'
-    `;
-    
-    const activity = await sql`
-      SELECT * FROM activity_log 
-      ORDER BY "createdAt" DESC 
-      LIMIT 10
-    `;
+    // Transform activity log format
+    const activity = (agentStatus.activity_log || []).map((item: any) => ({
+      task: item.task,
+      createdAt: item.time
+    }));
 
-    await client.end();
     return NextResponse.json({
-      status: result.rows[0] || null,
-      activity: activity.rows
+      status: {
+        id: 'scout',
+        status: agentStatus.status || 'idle',
+        currentTask: agentStatus.currentTask || 'Waiting for heartbeat',
+        version: agentStatus.version || '2.0.0',
+        lastHeartbeat: agentStatus.lastHeartbeat || null
+      },
+      activity
     });
   } catch (error) {
-    await client.end();
     console.error('Status fetch error:', error);
     return NextResponse.json({ error: 'Failed to fetch status' }, { status: 500 });
   }

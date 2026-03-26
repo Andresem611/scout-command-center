@@ -14,6 +14,13 @@ interface ActivityItem {
   createdAt: string;
 }
 
+interface Stats {
+  total: number;
+  contacted: number;
+  replied: number;
+  activePartners: number;
+}
+
 interface StatCardProps {
   title: string;
   value: string;
@@ -41,22 +48,39 @@ function StatCard({ title, value, subtitle, color }: StatCardProps) {
 export default function Dashboard() {
   const [agentStatus, setAgentStatus] = useState<AgentStatus | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [stats, setStats] = useState<Stats>({ total: 0, contacted: 0, replied: 0, activePartners: 1 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 5000);
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  async function fetchStatus() {
+  async function fetchData() {
     try {
-      const res = await fetch("/api/status");
-      const data = await res.json();
-      setAgentStatus(data.status);
-      setActivity(data.activity || []);
+      // Fetch agent status
+      const statusRes = await fetch("/api/status");
+      const statusData = await statusRes.json();
+      setAgentStatus(statusData.status);
+      setActivity(statusData.activity || []);
+
+      // Fetch prospects stats
+      const prospectsRes = await fetch("/api/prospects");
+      const prospectsData = await prospectsRes.json();
+      const prospects = prospectsData.prospects || [];
+      
+      const contacted = prospects.filter((p: any) => p.stage === 'Contacted').length;
+      const replied = prospects.filter((p: any) => ['Replied', 'Negotiating'].includes(p.stage)).length;
+      
+      setStats({
+        total: prospects.length,
+        contacted,
+        replied,
+        activePartners: 1 // Audrey Mora
+      });
     } catch (error) {
-      console.error("Failed to fetch status:", error);
+      console.error("Failed to fetch data:", error);
     } finally {
       setLoading(false);
     }
@@ -140,10 +164,30 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatCard title="Total Pipeline" value="—" subtitle="of 95 target" color="green" />
-        <StatCard title="Contacted" value="—" subtitle="outreach sent" color="blue" />
-        <StatCard title="Reply Rate" value="—" subtitle="0 replies" color="yellow" />
-        <StatCard title="Active Partners" value="1" subtitle="Audrey Mora" color="purple" />
+        <StatCard 
+          title="Total Pipeline" 
+          value={stats.total.toString()} 
+          subtitle="of 95 target" 
+          color="green" 
+        />
+        <StatCard 
+          title="Contacted" 
+          value={stats.contacted.toString()} 
+          subtitle="outreach sent" 
+          color="blue" 
+        />
+        <StatCard 
+          title="Reply Rate" 
+          value={stats.replied > 0 ? `${Math.round((stats.replied / stats.contacted) * 100)}%` : "0%"} 
+          subtitle={`${stats.replied} replies`} 
+          color="yellow" 
+        />
+        <StatCard 
+          title="Active Partners" 
+          value={stats.activePartners.toString()} 
+          subtitle="Audrey Mora" 
+          color="purple" 
+        />
       </div>
 
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">

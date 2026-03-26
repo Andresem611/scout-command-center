@@ -1,5 +1,18 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const DATA_FILE = join(process.cwd(), '..', 'scout_data.json');
+
+function loadData() {
+  try {
+    const content = readFileSync(DATA_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Failed to load scout_data.json:', error);
+    return { prospects: [], stats: {} };
+  }
+}
 
 export async function GET(request: Request) {
   try {
@@ -8,40 +21,22 @@ export async function GET(request: Request) {
     const city = searchParams.get('city');
     const branch = searchParams.get('branch');
 
-    let query = sql`SELECT * FROM prospects`;
-    
+    const data = loadData();
+    let prospects = data.prospects || [];
+
     if (stage) {
-      query = sql`SELECT * FROM prospects WHERE stage = ${stage}`;
+      prospects = prospects.filter((p: any) => p.stage === stage);
     }
     if (city) {
-      query = sql`SELECT * FROM prospects WHERE city = ${city}`;
+      prospects = prospects.filter((p: any) => p.city === city);
     }
     if (branch) {
-      query = sql`SELECT * FROM prospects WHERE branch = ${branch}`;
+      prospects = prospects.filter((p: any) => p.branch === branch);
     }
 
-    const result = await query;
-    return NextResponse.json({ prospects: result.rows });
+    return NextResponse.json({ prospects, count: prospects.length });
   } catch (error) {
     console.error('Prospects fetch error:', error);
     return NextResponse.json({ error: 'Failed to fetch prospects' }, { status: 500 });
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { name, handle, followers, city, email, stage, type, branch, score } = body;
-
-    const result = await sql`
-      INSERT INTO prospects (name, handle, followers, city, email, stage, type, branch, score)
-      VALUES (${name}, ${handle}, ${followers}, ${city}, ${email}, ${stage}, ${type}, ${branch}, ${score})
-      RETURNING *
-    `;
-
-    return NextResponse.json({ prospect: result.rows[0] });
-  } catch (error) {
-    console.error('Prospect create error:', error);
-    return NextResponse.json({ error: 'Failed to create prospect' }, { status: 500 });
   }
 }
