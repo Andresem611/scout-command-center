@@ -1,0 +1,20 @@
+# Scout API Server - Systemd Service Configuration
+# Place this file at: /etc/systemd/system/scout-api.service
+# Then run: sudo systemctl enable scout-api && sudo systemctl start scout-api
+
+[Unit]
+Description=Scout API Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/.openclaw/workspace
+Environment="PYTHONPATH=/root/.openclaw/workspace"
+Environment="SCOUT_DATA_FILE=/root/.openclaw/workspace/scout_data.json"
+ExecStart=/usr/bin/python3 /root/.openclaw/workspace/api_server.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
