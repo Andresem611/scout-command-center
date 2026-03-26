@@ -12,7 +12,7 @@ model AgentStatus {
   lastHeartbeat   DateTime @updatedAt
   status          String   // active, idle, error
   currentTask     String?
-  version         String   @default("1.0.0")
+  version         String   @default("2.0.0")
   healthChecks    Json?    // { "2024-03-27": { checkedAt, status } }
   activityLog     Json?    // [{ time, task }]
   lastError       Json?    // { time, message }
@@ -26,22 +26,79 @@ model Prospect {
   followers   Int
   city        String
   email       String?
-  stage       String   // Uncontacted, Prospected, Contacted, Replied, Negotiating, Declined
+  stage       String   // Uncontacted, Prospected, Contacted, Replied, Negotiating, Declined, Partner
   type        String   // Nano, Micro, Macro, Mega
-  branch      String   // Mom Influencers (IG), Mom Blogs, etc.
+  branch      String   // Mom Influencers (IG), Mom Influencers (TikTok/YouTube), Mom Blogs, Homeschool Influencers (AZ), Homeschool Blogs (AZ), Homeschool Expansion
   score       Int      @default(0)
+  scoreReason String?  // Why this score (email found, high engagement, etc.)
   draftStatus String?  // pending, approved, sent
   lastContact DateTime?
+  nextFollowUp DateTime? // Day 3, 7, 14 follow-up dates
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  drafts      Draft[]
+  interactions Interaction[]
+  
+  @@index([stage])
+  @@index([branch])
+  @@index([score])
 }
 
 model Draft {
   id          String   @id @default(cuid())
   prospectId  String
+  prospect    Prospect @relation(fields: [prospectId], references: [id])
   subject     String
   body        String
   status      String   // pending, approved, sent
+  sentAt      DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Interaction {
+  id          String   @id @default(cuid())
+  prospectId  String
+  prospect    Prospect @relation(fields: [prospectId], references: [id])
+  situation   String   // What happened (reply received, etc.)
+  guidance    String?  // What Andres said to do
+  response    String?  // What I sent
+  outcome     String?  // Result (converted, cold, etc.)
+  patternTag  String?  // e.g., "pricing question from mom influencer"
+  createdAt   DateTime @default(now())
+}
+
+model BlogForm {
+  id          String   @id @default(cuid())
+  name        String   // Blog name
+  url         String   // Blog URL
+  contactUrl  String?  // Contact form URL if different
+  message     String   // Pre-written message
+  status      String   // pending, auto_submitted, manual_needed, completed
+  city        String?
+  branch      String   // Mom Blogs, Homeschool Blogs (AZ), etc.
+  submittedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Reply {
+  id          String   @id @default(cuid())
+  prospectName String
+  prospectEmail String?
+  subject     String
+  body        String
+  type        String   // INTERESTED, QUESTIONS, DECLINED, RATES, OUT_OF_OFFICE, SPAM
+  status      String   // unread, read, handled
+  receivedAt  DateTime @default(now())
+  handledAt   DateTime?
+  notes       String?
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  task        String
+  details     Json?    // Additional context
+  createdAt   DateTime @default(now())
 }

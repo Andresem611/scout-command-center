@@ -29,6 +29,9 @@ export default function RootLayout({
                   <a href="/" className="hover:text-white transition">Dashboard</a>
                   <a href="/pipeline" className="hover:text-white transition">Pipeline</a>
                   <a href="/morning-batch" className="hover:text-white transition">Morning Batch</a>
+                  <a href="/blog-forms" className="hover:text-white transition">Blog Forms</a>
+                  <a href="/inbox" className="hover:text-white transition">Inbox</a>
+                  <a href="/knowledge" className="hover:text-white transition">Knowledge</a>
                 </div>
               </div>
             </div>
