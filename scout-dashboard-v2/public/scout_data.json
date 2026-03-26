@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "last_updated": "2026-03-27T07:00:00Z",
-    "version": "1.1",
+    "last_updated": "2026-03-27T07:30:00Z",
+    "version": "1.2",
     "updated_by": "scout-autonomous-cycle"
-  },,
+  },
   "prospects": [
     {
       "name": "Ana (Cleverly Me)",
@@ -20,26 +20,26 @@
     {
       "name": "Laura Scott",
       "handle": "laurascottandco",
-      "followers": 45000,
+      "followers": 160000,
       "city": "Miami",
-      "email": "",
+      "email": "claudia@thedigitalbrandarchitects.com",
       "stage": "Prospected",
-      "type": "Nano",
+      "type": "Micro",
       "branch": "Mom Blogs",
-      "score": 3,
-      "scoreReason": "Miami doctor mom blogger, Parents magazine feature - need to find email"
+      "score": 5,
+      "scoreReason": "Harvard MD, dermatologist, 160K IG, Parents mag feature - managed by Digital Brand Architects"
     },
     {
       "name": "Natalie Lesnefsky",
       "handle": "athomewithnatalie",
       "followers": 32000,
       "city": "Miami",
-      "email": "",
+      "email": "partnerships@athomewithnatalie.com",
       "stage": "Prospected",
       "type": "Nano",
       "branch": "Mom Blogs",
-      "score": 3,
-      "scoreReason": "DIY/Party planning blogger - need to find email"
+      "score": 5,
+      "scoreReason": "DIY/party planning blogger, 6 kids, active partnerships email found"
     },
     {
       "name": ":---",

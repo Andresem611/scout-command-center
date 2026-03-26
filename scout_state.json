@@ -1,31 +1,25 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-27T07:00:00Z",
+  "last_heartbeat": "2026-03-27T07:30:00Z",
   "current_task": {
-    "type": "drafting",
-    "target": "new_blog_prospects",
-    "started_at": "2026-03-27T07:00:00Z",
+    "type": "complete",
+    "target": "cycle_1_complete",
+    "started_at": "2026-03-27T07:30:00Z",
     "retries": 0
   },
   "task_queue": [
     {
       "priority": 1,
-      "type": "drafting",
-      "target": "Ana (Cleverly Me)",
-      "status": "active",
-      "retries": 0
+      "type": "awaiting_approval",
+      "target": "draft_queue",
+      "status": "ready",
+      "count": 3
     },
     {
       "priority": 2,
-      "type": "drafting",
-      "target": "Laura Scott",
-      "status": "pending"
-    },
-    {
-      "priority": 3,
-      "type": "drafting",
-      "target": "Natalie Lesnefsky",
+      "type": "prospecting",
+      "target": "Mom Blogs - LA",
       "status": "pending"
     }
   ],
@@ -36,14 +30,21 @@
         "last_attempt": "2026-03-27T07:00:00Z",
         "status": "completed",
         "found": 3
+      },
+      "Mom Blogs - LA": {
+        "attempts": 0,
+        "last_attempt": null,
+        "status": "queued"
       }
     },
     "blog_forms": {},
-    "drafting": {}
+    "drafting": {
+      "completed": 3
+    }
   },
   "stats_this_session": {
     "prospects_found": 3,
-    "drafts_created": 0,
+    "drafts_created": 3,
     "emails_sent": 0,
     "replies_received": 0,
     "blog_forms_submitted": 0
