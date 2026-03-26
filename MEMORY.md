@@ -288,6 +288,69 @@ When prospect is warm and ready for real conversation:
 
 ---
 
+## Dashboard Deployment — Happy Path
+
+**When making ANY changes to the dashboard, follow this exact sequence.**
+
+### For Code Changes (UI, new panels, logic)
+| Step | Action | Time |
+|:---|:---|:---|
+| 1 | Edit `streamlit_app.py` | — |
+| 2 | Test locally: `streamlit run streamlit_app.py` | 10s |
+| 3 | `git add streamlit_app.py` | 1s |
+| 4 | `git commit -m "Clear description"` | 1s |
+| 5 | `git push origin main` | 5s |
+| 6 | Wait for GitHub webhook | 30s |
+| 7 | **Reboot Streamlit app** (Manage app → Reboot) | 60s |
+| 8 | **Hard refresh browser** (Ctrl+Shift+R) | 2s |
+| 9 | Verify change visible | 5s |
+
+**Common failures:**
+- Skipping reboot → Old code cached
+- Skipping hard refresh → Browser cached
+- Not waiting for webhook → Deploy hasn't started
+
+### For Data Changes (new prospects, pipeline updates)
+| Step | Action | Time |
+|:---|:---|:---|
+| 1 | Update pipeline markdown files | — |
+| 2 | Run `python3 sync_pipeline.py` | 2s |
+| 3 | Verify `scout_data.json` updated | 1s |
+| 4 | `git add -A && git commit -m "Update pipeline"` | 2s |
+| 5 | `git push` | 5s |
+| 6 | **Reboot Streamlit app** | 60s |
+| 7 | Verify prospect count matches | 5s |
+
+### For Heartbeat/Agent Changes
+| Step | Action | Time |
+|:---|:---|:---|
+| 1 | Edit `heartbeat.py` | — |
+| 2 | Test: `python3 heartbeat.py` | 5s |
+| 3 | Commit + push | 10s |
+| 4 | No Streamlit reboot needed | — |
+
+**Why different?** Heartbeat runs on cron, not Streamlit server.
+
+---
+
+## Debugging Quick Reference
+
+**Dashboard not showing changes?**
+1. Check GitHub commits first
+2. Reboot Streamlit app
+3. Hard refresh browser
+4. Add debug marker to verify code deployed
+5. Nuclear: Delete + re-deploy app
+
+**Data not syncing?**
+- Run `sync_pipeline.py`
+- Check `scout_data.json` has correct count
+- Reboot app (data cached on load)
+
+**Full guide:** `DEBUGGING.md`
+
+---
+
 ## Session Protection
 - Daily memory logs created automatically
 - Before context compaction: save current session to memory/

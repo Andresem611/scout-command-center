@@ -35,6 +35,21 @@ def update_agent_status(data, status="active", current_task="", error=None):
     agent_status['status'] = status
     agent_status['current_task'] = current_task
     agent_status['session_uptime'] = agent_status.get('session_start', datetime.now().isoformat())
+    agent_status['dashboard_version'] = "1.1.0"  # Sync with streamlit_app.py
+    
+    # Daily health check tracking
+    now = datetime.now()
+    today = now.strftime("%Y-%m-%d")
+    if 'health_checks' not in agent_status:
+        agent_status['health_checks'] = {}
+    
+    # Run health check once per day
+    if today not in agent_status['health_checks']:
+        agent_status['health_checks'][today] = {
+            'checked_at': now.isoformat(),
+            'status': 'pending_manual_verification'
+        }
+        log(f"🩺 Daily health check scheduled for {today}")
     
     # Activity log (keep last 50 entries)
     if 'activity_log' not in agent_status:
@@ -48,6 +63,13 @@ def update_agent_status(data, status="active", current_task="", error=None):
         agent_status['activity_log'] = agent_status['activity_log'][:50]
     
     if error:
+        agent_status['last_error'] = {
+            'time': datetime.now().isoformat(),
+            'message': str(error)
+        }
+    
+    data['agent_status'] = agent_status
+    return data
         agent_status['last_error'] = {
             'time': datetime.now().isoformat(),
             'message': str(error)
