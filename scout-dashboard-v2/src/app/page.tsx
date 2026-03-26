@@ -14,6 +14,30 @@ interface ActivityItem {
   createdAt: string;
 }
 
+interface StatCardProps {
+  title: string;
+  value: string;
+  subtitle: string;
+  color: string;
+}
+
+function StatCard({ title, value, subtitle, color }: StatCardProps) {
+  const colorClasses: Record<string, string> = {
+    green: "text-green-400",
+    blue: "text-blue-400",
+    yellow: "text-yellow-400",
+    purple: "text-purple-400",
+  };
+
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
+      <p className="text-sm text-gray-500 mb-2">{title}</p>
+      <p className={`text-4xl font-bold ${colorClasses[color]} mb-1`}>{value}</p>
+      <p className="text-sm text-gray-600">{subtitle}</p>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const [agentStatus, setAgentStatus] = useState<AgentStatus | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
@@ -21,7 +45,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchStatus();
-    const interval = setInterval(fetchStatus, 5000); // Poll every 5s
+    const interval = setInterval(fetchStatus, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -84,17 +108,15 @@ export default function Dashboard() {
     );
   }
 
+  const borderColor = agentStatus 
+    ? getStatusColor(agentStatus.status).split(" ")[1] 
+    : "border-gray-600";
+
   return (
     <div className="space-y-6">
-      {/* Version marker */}
       <div className="text-xs text-gray-600">v2.0.0-nextjs</div>
 
-      {/* Agent Status Panel */}
-      <div
-        className={`bg-gray-900 border border-gray-800 rounded-xl p-6 border-l-4 ${
-          agentStatus ? getStatusColor(agentStatus.status).split(" ")[1] : "border-gray-600"
-        }`}
-      >
+      <div className={`bg-gray-900 border border-gray-800 rounded-xl p-6 border-l-4 ${borderColor}`}>
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -103,11 +125,7 @@ export default function Dashboard() {
             </h2>
             <p className="text-gray-400 mt-1">
               Last seen:{" "}
-              <span
-                className={
-                  agentStatus ? getStatusColor(agentStatus.status).split(" ")[0] : "text-gray-400"
-                }
-              >
+              <span className={agentStatus ? getStatusColor(agentStatus.status).split(" ")[0] : "text-gray-400"}>
                 {agentStatus ? timeSince(agentStatus.lastHeartbeat) : "—"}
               </span>
             </p>
@@ -121,7 +139,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard title="Total Pipeline" value="—" subtitle="of 95 target" color="green" />
         <StatCard title="Contacted" value="—" subtitle="outreach sent" color="blue" />
@@ -129,7 +146,6 @@ export default function Dashboard() {
         <StatCard title="Active Partners" value="1" subtitle="Audrey Mora" color="purple" />
       </div>
 
-      {/* Activity Log */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
         <h3 className="text-lg font-semibold mb-4">📜 Recent Activity</h3>
         {activity.length > 0 ? (
@@ -150,33 +166,6 @@ export default function Dashboard() {
           <p className="text-gray-500">No recent activity</p>
         )}
       </div>
-    </div>
-  );
-}
-
-function StatCard({
-  title,
-  value,
-  subtitle,
-  color,
-}: {
-  title: string;
-  value: string;
-  subtitle: string;
-  color: string;
-}) {
-  const colorClasses: Record<string, string> = {
-    green: "text-green-400",
-    blue: "text-blue-400",
-    yellow: "text-yellow-400",
-    purple: "text-purple-400",
-  };
-
-  return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
-      <p className="text-sm text-gray-500 mb-2">{title}</p>
-      <p className={`text-4xl font-bold ${colorClasses[color]} mb-1`>{value}</p>
-      <p className="text-sm text-gray-600">{subtitle}</p>
     </div>
   );
 }
