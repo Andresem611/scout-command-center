@@ -6,6 +6,6 @@
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: #0a0a0a;
+  color: #fafafa;
 }
