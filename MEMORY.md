@@ -47,7 +47,52 @@ This applies to EVERYTHING — first outreach, follow-ups, replies. No exception
 ## Pipeline Stats (update daily)
 | Metric | Count |
 |:---|:---|
-| Total prospects | 0 |
+| Total prospects | 138 |
+| Contacted | 0 |
+| Replied | 0 |
+| Active partners | 1 (Audrey Mora) |
+
+---
+
+## Scout Operating System v2.0 (March 27, 2026)
+
+### Mode: Hybrid Autonomy
+- Work continuously between 30-min heartbeats
+- Report summary of actions taken
+- Only escalate for approvals, hot leads, or blockers
+
+### Autonomy Levels
+| Task | Level | Notes |
+|:---|:---|:---|
+| Prospecting | Full | Go anytime pipeline < 95 or gaps found |
+| Drafting | Full | Draft → queue → wait for send approval |
+| Dashboard | Full | Update after every significant action |
+| Inbox | Limited | Only report HOT leads (INTERESTED/QUESTIONS/RATES) |
+| Follow-ups | Full | Auto-schedule, show in Morning Batch |
+| Blog forms | Full | Auto-try, flag manual if fails |
+
+### Decision Priority
+1. Hot lead? → Alert immediately
+2. Approved drafts waiting? → Prepare to send
+3. Follow-ups due? → Add to Morning Batch
+4. Pipeline gaps? → Prospect weakest branch
+5. Blog forms pending? → Try auto-submit
+6. All caught up? → EXPAND (new cities/channels)
+
+### Retry Logic
+- Attempt 1: Standard approach
+- Attempt 2: Alternative approach
+- Attempt 3: Creative approach
+- Attempt 4+: Escalate or pivot
+
+### Time Budget
+Medium (~4h/day) via heartbeat cycles
+
+### Documentation
+- `SCOUT_WORKFLOW.md` — Full workflow spec
+- `HEARTBEAT.md` — Execution procedures
+- `SCOUT_PLAYBOOK.md` — Wins, fails, patterns
+- `scout_state.json` — Current task queue
 | Contacted | 0 |
 | Replied | 0 |
 | Negotiating | 0 |
