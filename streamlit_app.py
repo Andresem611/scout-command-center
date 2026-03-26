@@ -13,14 +13,15 @@ st.set_page_config(
 
 # Load data from shared file
 DATA_FILE = "scout_data.json"
+APP_VERSION = "1.1.0-agent-panel"  # Cache bust
 
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=5)
 def load_data():
     """Load data from JSON file"""
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as f:
             return json.load(f)
-    return {"prospects": [], "replies": [], "blog_forms": [], "interactions": [], "stats": {}}
+    return {"prospects": [], "replies": [], "blog_forms": [], "interactions": [], "stats": {}, "agent_status": {}}
 
 def save_data(data):
     """Save data to JSON file"""
@@ -89,6 +90,21 @@ st.sidebar.markdown(f"Last updated: {data.get('metadata', {}).get('last_updated'
 # ========== DASHBOARD VIEW ==========
 if page == "📊 Dashboard":
     st.title("📊 Dashboard")
+    
+    # DEBUG: Force fresh data load and show if agent_status exists
+    st.cache_data.clear()
+    data = load_data()
+    prospects = data.get('prospects', [])
+    
+    # Recalculate stats with fresh data
+    total_prospects = len(prospects)
+    contacted = len([p for p in prospects if p.get('stage') == 'Contacted'])
+    replied = len([p for p in prospects if p.get('stage') in ['Replied', 'Negotiating']])
+    pending_drafts = len([p for p in prospects 
+                          if p.get('draft_status') == 'pending' 
+                          and p.get('email') 
+                          and '@' in str(p.get('email', ''))
+                          and p.get('stage') == 'Prospected'])
     
     # AGENT STATUS PANEL
     agent_status = data.get('agent_status', {})
