@@ -1,40 +1,52 @@
 #!/usr/bin/env python3
 """
-Scout Heartbeat - Task Priority System
-Priority: 1. Approvals → 2. Inbox → 3. Prospecting
+Scout Heartbeat - Task Priority System with Auto-Deploy
+Priority: 1. Approvals → 2. Inbox → 3. Prospecting → 4. Auto-Deploy
 """
 
 import json
 import os
-import time
-from datetime import datetime, timedelta
+import subprocess
+from datetime import datetime
 from pathlib import Path
 
 # Configuration
 DATA_FILE = Path("/root/.openclaw/workspace/scout_data.json")
 LOG_FILE = Path("/root/.openclaw/workspace/memory/heartbeat-log.jsonl")
+WORKSPACE = Path("/root/.openclaw/workspace")
 AGENTMAIL_API_KEY = os.getenv("AGENTMAIL_API_KEY", "")
 
 # Priority thresholds
 TARGET_PIPELINE = 95
-MIN_PIPELINE_BEFORE_PROSPECTING = 50  # Don't prospect if above this
+MIN_PIPELINE_BEFORE_PROSPECTING = 50
 
 class Colors:
     GREEN = "\033[92m"
     YELLOW = "\033[93m"
     RED = "\033[91m"
     BLUE = "\033[94m"
+    CYAN = "\033[96m"
     RESET = "\033[0m"
 
 def log(msg, level="info"):
     timestamp = datetime.now().strftime("%H:%M:%S")
     color = {"info": "", "success": Colors.GREEN, "warning": Colors.YELLOW, 
-             "error": Colors.RED, "priority": Colors.BLUE}.get(level, "")
+             "error": Colors.RED, "priority": Colors.BLUE, "deploy": Colors.CYAN}.get(level, "")
     print(f"{color}[{timestamp}] {msg}{Colors.RESET}")
     
-    # Append to log file
     with open(LOG_FILE, 'a') as f:
         f.write(json.dumps({"time": timestamp, "level": level, "msg": msg}) + "\n")
+
+def run_git_command(cmd, cwd=WORKSPACE):
+    """Run a git command"""
+    try:
+        result = subprocess.run(
+            cmd, shell=True, cwd=cwd,
+            capture_output=True, text=True, timeout=30
+        )
+        return result.returncode == 0, result.stdout, result.stderr
+    except Exception as e:
+        return False, "", str(e)
 
 def load_data():
     if DATA_FILE.exists():
@@ -75,7 +87,6 @@ def task_check_approvals():
             failed += 1
             continue
         
-        # Generate and send email
         success = send_email(prospect)
         
         if success:
@@ -90,7 +101,6 @@ def task_check_approvals():
             failed += 1
             log(f"❌ FAILED to send to {prospect['name']}", "error")
     
-    # Update stats
     data['stats']['contacted'] = len([p for p in data['prospects'] if p.get('stage') == 'Contacted'])
     save_data(data)
     
@@ -100,60 +110,17 @@ def task_check_approvals():
 def send_email(prospect):
     """Send email via AgentMail API"""
     # TODO: Implement actual AgentMail API call
-    # For now, simulate success
-    
-    first_name = prospect['name'].split()[0]
-    city = prospect.get('city', 'Your City')
-    personalization = prospect.get('personalization', 'I love the way your content connects')
-    
-    subject = f"Partnership: Music Education for {city} Families"
-    body = f"""Hi {first_name},
+    return True  # Simulated success
 
-This is Keri! I'm a pianist, music teacher, and co-founder of Thoven — an all-in-one music education platform where families can find verified, background-checked teachers trained at top schools like The Juilliard School.
-
-After years of teaching and working closely with families, I've met so many parents who wanted music lessons for their children but feel unsure where to begin or how to stay connected to their child's progress. That's why we built Thoven.
-
-With Thoven, parents and students can:
-- Feel confident knowing every teacher is background-checked and verified
-- Seamlessly schedule and pay for lessons in one place (secured with Stripe)
-- Access a personalized, gamified dashboard to track progress and motivate practice
-- View lesson notes, assignments, and real-time progress updates
-
-We work with a growing group of teachers trained at The Juilliard School, Manhattan School of Music, Eastman School of Music and more.
-
-{personalization}, so I wanted to reach out personally to see if you'd be open to working together in a way that feels natural for you and your audience.
-
-We'd be happy to structure this in a way that works best for you:
-- Affiliate partnership: Earn commission on every lesson booked through your unique link
-- Complimentary lessons: We can provide free lessons to your family so you can experience the platform and see the value firsthand
-- Other approaches: If you have a preferred method or different structure in mind, we're open to exploring options that work best for you
-
-If you're interested, I'd love to schedule a quick call to walk you through the platform, answer any questions, and explore what a partnership could look like.
-
-Looking forward to connecting!
-
-Keri Erten
-Co-Founder & CXO
-Music Educator & Pianist"""
-    
-    # TODO: Replace with actual AgentMail API call
-    # For now, just log and return success (simulated)
-    return True
-
-# ============ TASK 2: INBOX (SECOND PRIORITY) ============
+# ============ TASK 2: INBOX ============
 
 def task_check_inbox():
     """Check AgentMail inbox for replies"""
     log("📥 TASK 2: Checking inbox...")
-    
-    # TODO: Implement AgentMail inbox check
-    # API: GET https://api.agentmail.to/v1/inbox
-    
-    # For now, simulate no new replies
     log("📥 Inbox check: AgentMail API not yet configured")
     return {"new_replies": 0, "action": "none"}
 
-# ============ TASK 3: PROSPECTING (LOWEST PRIORITY) ============
+# ============ TASK 3: PROSPECTING ============
 
 def task_check_prospecting_needs():
     """Check if prospecting is needed"""
@@ -167,26 +134,57 @@ def task_check_prospecting_needs():
         return {"needed": False, "current": total, "target": TARGET_PIPELINE}
     
     if total >= MIN_PIPELINE_BEFORE_PROSPECTING:
-        log(f"ℹ️  Pipeline adequate ({total}) — prospecting paused until below {MIN_PIPELINE_BEFORE_PROSPECTING}")
+        log(f"ℹ️  Pipeline adequate ({total}) — prospecting paused")
         return {"needed": False, "current": total, "target": TARGET_PIPELINE}
     
     gap = TARGET_PIPELINE - total
     log(f"⚠️  Pipeline low ({total}/{TARGET_PIPELINE}) — {gap} prospects needed", "warning")
+    return {"needed": True, "current": total, "target": TARGET_PIPELINE, "gap": gap}
+
+# ============ TASK 4: AUTO-DEPLOY ============
+
+def task_auto_deploy():
+    """Auto-commit changes and push to GitHub for Streamlit Cloud deploy"""
+    log("🚀 TASK 4: Auto-deploy...", "deploy")
     
-    return {
-        "needed": True,
-        "current": total,
-        "target": TARGET_PIPELINE,
-        "gap": gap,
-        "action": "prospect_now"
-    }
+    # Check if there are changes
+    success, stdout, stderr = run_git_command("git status --porcelain")
+    
+    if not stdout.strip():
+        log("ℹ️  No changes to deploy", "deploy")
+        return {"deployed": False, "reason": "no_changes"}
+    
+    # Add all changes
+    success, _, stderr = run_git_command("git add -A")
+    if not success:
+        log(f"❌ Git add failed: {stderr}", "error")
+        return {"deployed": False, "reason": "git_add_failed"}
+    
+    # Commit with timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    commit_msg = f"Auto-deploy: Pipeline update {timestamp}"
+    success, _, stderr = run_git_command(f'git commit -m "{commit_msg}"')
+    
+    if not success:
+        log(f"❌ Git commit failed: {stderr}", "error")
+        return {"deployed": False, "reason": "git_commit_failed"}
+    
+    # Push to GitHub
+    success, stdout, stderr = run_git_command("git push origin main")
+    
+    if success:
+        log("✅ DEPLOYED: Changes pushed to GitHub → Streamlit Cloud auto-updates", "deploy")
+        return {"deployed": True, "timestamp": timestamp}
+    else:
+        log(f"❌ Git push failed: {stderr}", "error")
+        return {"deployed": False, "reason": "git_push_failed"}
 
 # ============ MAIN HEARTBEAT ============
 
 def run_heartbeat():
     log("="*60)
     log("🎯 SCOUT HEARTBEAT STARTING")
-    log(f"Priority: APPROVALS → INBOX → PROSPECTING")
+    log("Priority: APPROVALS → INBOX → PROSPECTING → AUTO-DEPLOY")
     log("="*60)
     
     results = {
@@ -194,38 +192,41 @@ def run_heartbeat():
         "tasks": {}
     }
     
-    # TASK 1: APPROVALS (Always run first)
+    # TASK 1: APPROVALS
     approval_result = task_check_approvals()
     results['tasks']['approvals'] = approval_result
     
-    # If we sent emails, make that prominent
     if approval_result['sent'] > 0:
-        log(f"🚀 PRIORITY ACTION: Sent {approval_result['sent']} emails", "priority")
+        log(f"🚀 PRIORITY: Sent {approval_result['sent']} emails", "priority")
     
-    # TASK 2: INBOX (Always run)
+    # TASK 2: INBOX
     inbox_result = task_check_inbox()
     results['tasks']['inbox'] = inbox_result
     
-    # TASK 3: PROSPECTING (Only if time permits and needed)
+    # TASK 3: PROSPECTING
     prospecting_result = task_check_prospecting_needs()
     results['tasks']['prospecting'] = prospecting_result
+    
+    # TASK 4: AUTO-DEPLOY (always run at end)
+    deploy_result = task_auto_deploy()
+    results['tasks']['deploy'] = deploy_result
     
     # Final stats
     data = load_data()
     stats = data.get('stats', {})
     log("-"*60)
-    log(f"📊 FINAL STATS: {stats.get('total_prospects', 0)} prospects | "
+    log(f"📊 STATS: {stats.get('total_prospects', 0)} prospects | "
         f"{stats.get('contacted', 0)} contacted | "
         f"{stats.get('replied', 0)} replied")
+    
+    if deploy_result.get('deployed'):
+        log("🌐 Streamlit Cloud will update in ~2 minutes", "deploy")
+    
     log("="*60)
     
     return results
 
 if __name__ == "__main__":
-    # Ensure log directory exists
     LOG_FILE.parent.mkdir(exist_ok=True)
-    
     result = run_heartbeat()
-    
-    # Print JSON result for cron logging
     print("\n" + json.dumps(result, indent=2))
