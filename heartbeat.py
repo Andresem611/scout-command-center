@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 from datetime import datetime
 
-DATA_FILE = "/root/.openclaw/workspace/scout_data.json"
+DATA_FILE = "/root/.openclaw/workspace/scout-dashboard-v2/public/scout_data.json"
 DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-tau.vercel.app/api/status")
 
 def log(message):
