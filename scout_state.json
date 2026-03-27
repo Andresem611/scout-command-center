@@ -1,11 +1,11 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-28T02:50:00Z",
+  "last_heartbeat": "2026-03-28T03:00:00Z",
   "current_task": {
-    "type": "prospecting",
-    "target": "Mom Blogs - LA",
-    "started_at": "2026-03-28T02:50:00Z",
+    "type": "drafting",
+    "target": "SF Mom Blogs",
+    "started_at": "2026-03-28T03:00:00Z",
     "retries": 0
   },
   "task_queue": [
@@ -18,16 +18,17 @@
     },
     {
       "priority": 2,
-      "type": "prospecting",
-      "target": "Mom Blogs - LA",
-      "status": "completed",
-      "found": 3
+      "type": "pending_approval",
+      "target": "Sarah, Anabel, Melanie",
+      "status": "drafts_ready",
+      "count": 3
     },
     {
       "priority": 3,
-      "type": "drafting",
-      "target": "la_mom_blogs",
-      "status": "pending"
+      "type": "prospecting",
+      "target": "Mom Blogs - SF",
+      "status": "completed",
+      "found": 3
     }
   ],
   "retry_tracker": {
@@ -43,18 +44,25 @@
         "last_attempt": "2026-03-28T02:50:00Z",
         "status": "completed",
         "found": 3
+      },
+      "Mom Blogs - SF": {
+        "attempts": 1,
+        "last_attempt": "2026-03-28T03:00:00Z",
+        "status": "completed",
+        "found": 3
       }
     },
     "blog_forms": {},
     "drafting": {
-      "completed": 3,
+      "completed": 6,
       "approved": 3,
+      "pending_approval": 3,
       "pending_manual_send": 3
     }
   },
   "stats_this_session": {
-    "prospects_found": 6,
-    "drafts_created": 3,
+    "prospects_found": 9,
+    "drafts_created": 6,
     "drafts_approved": 3,
     "emails_sent": 0,
     "emails_pending_manual": 3,
@@ -68,5 +76,5 @@
       "workaround": "Andres will send manually when ready"
     }
   ],
-  "next_expansion_target": "Mom Blogs - SF"
+  "next_expansion_target": "Mom Blogs - Chicago"
 }

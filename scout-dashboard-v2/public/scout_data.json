@@ -1,10 +1,45 @@
 {
   "metadata": {
-    "last_updated": "2026-03-28T02:50:00Z",
-    "version": "1.1",
-    "updated_by": "scout-autonomous-prospecting"
+    "last_updated": "2026-03-28T02:46:02.332953",
+    "version": "1.0"
   },
   "prospects": [
+    {
+      "name": "TerriAnn (Cookies & Clogs)",
+      "handle": "cookiesandclogs",
+      "followers": 22000,
+      "city": "San Francisco",
+      "email": "terriann@cookiesandclogs.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "SF Bay Area family blog, tech/travel focus, direct email on contact page"
+    },
+    {
+      "name": "Christine Yun",
+      "handle": "trendenvy",
+      "followers": 19400,
+      "city": "San Francisco",
+      "email": "hello@trendenvy.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "Stylish SF city mom, 2 under 4, direct email in bio"
+    },
+    {
+      "name": "Mathilda Traylor",
+      "handle": "mathildatraylor",
+      "followers": 9800,
+      "city": "San Francisco",
+      "email": "mathilda.team@emcpower.co",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "SF Bay Area travel/family lifestyle, managed by EMCPower"
+    },
     {
       "name": "Sarah (MomsLA)",
       "handle": "momsla",
@@ -1603,10 +1638,10 @@
   "interactions": [],
   "blog_forms": [],
   "stats": {
-    "total_prospects": 141,
-    "contacted": 3,
+    "total_prospects": 144,
+    "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-28T01:48:23.497620"
+    "last_calculated": "2026-03-28T02:46:02.332932"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-27T03:15:11.075501",
