@@ -1,11 +1,11 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-28T02:45:00Z",
+  "last_heartbeat": "2026-03-28T02:50:00Z",
   "current_task": {
-    "type": "awaiting_manual_send",
-    "target": "3_miami_mom_blogs",
-    "started_at": "2026-03-27T07:45:00Z",
+    "type": "prospecting",
+    "target": "Mom Blogs - LA",
+    "started_at": "2026-03-28T02:50:00Z",
     "retries": 0
   },
   "task_queue": [
@@ -20,6 +20,13 @@
       "priority": 2,
       "type": "prospecting",
       "target": "Mom Blogs - LA",
+      "status": "completed",
+      "found": 3
+    },
+    {
+      "priority": 3,
+      "type": "drafting",
+      "target": "la_mom_blogs",
       "status": "pending"
     }
   ],
@@ -32,9 +39,10 @@
         "found": 3
       },
       "Mom Blogs - LA": {
-        "attempts": 0,
-        "last_attempt": null,
-        "status": "queued"
+        "attempts": 1,
+        "last_attempt": "2026-03-28T02:50:00Z",
+        "status": "completed",
+        "found": 3
       }
     },
     "blog_forms": {},
@@ -45,7 +53,7 @@
     }
   },
   "stats_this_session": {
-    "prospects_found": 3,
+    "prospects_found": 6,
     "drafts_created": 3,
     "drafts_approved": 3,
     "emails_sent": 0,
@@ -60,5 +68,5 @@
       "workaround": "Andres will send manually when ready"
     }
   ],
-  "next_expansion_target": "Mom Blogs - LA"
+  "next_expansion_target": "Mom Blogs - SF"
 }

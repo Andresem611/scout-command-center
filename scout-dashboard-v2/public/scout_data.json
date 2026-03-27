@@ -1,9 +1,46 @@
 {
   "metadata": {
-    "last_updated": "2026-03-28T01:48:23.497649",
-    "version": "1.0"
+    "last_updated": "2026-03-28T02:50:00Z",
+    "version": "1.1",
+    "updated_by": "scout-autonomous-prospecting"
   },
   "prospects": [
+    {
+      "name": "Sarah (MomsLA)",
+      "handle": "momsla",
+      "followers": 25000,
+      "city": "Los Angeles",
+      "email": "Sarah@MomsLA.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "LA mom blog network, established partnerships, direct email on About page"
+    },
+    {
+      "name": "Anabel (Do Tell, Anabel)",
+      "handle": "dotellanabel",
+      "followers": 18000,
+      "city": "Los Angeles",
+      "email": "DoTellAnabel@gmail.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "SoCal lifestyle blogger, Disney Parks Moms Panel alum, open to collaborations"
+    },
+    {
+      "name": "Melanie (A Dramatic Mommy)",
+      "handle": "meladramaticmommy",
+      "followers": 12000,
+      "city": "Los Angeles",
+      "email": "ADramaticMommy@gmail.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "LA mom blogger since 2008, past sponsors include TJ Maxx, Coca Cola, media features"
+    },
     {
       "name": "Ana (Cleverly Me)",
       "handle": "cleverlyme",
