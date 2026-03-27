@@ -1568,9 +1568,10 @@
   "interactions": [],
   "blog_forms": [],
   "stats": {
-    "total_prospects": 138,
-    "contacted": 0,
-    "replied": 0
+    "total_prospects": 141,
+    "contacted": 3,
+    "replied": 0,
+    "last_calculated": "2026-03-27T09:45:27.717786"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-27T03:15:11.075501",
