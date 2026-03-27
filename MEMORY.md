@@ -47,10 +47,16 @@ This applies to EVERYTHING — first outreach, follow-ups, replies. No exception
 ## Pipeline Stats (update daily)
 | Metric | Count |
 |:---|:---|
-| Total prospects | 138 |
-| Contacted | 0 |
+| Total prospects | 141 |
+| Contacted | 3 |
 | Replied | 0 |
 | Active partners | 1 (Audrey Mora) |
+
+**Data Source:** `scout-dashboard-v2/public/scout_data.json` (single source of truth)
+
+---
+
+## Scout Operating System v2.0 (March 27, 2026)
 
 ---
 

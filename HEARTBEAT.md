@@ -117,7 +117,7 @@ Update dashboard
 
 ### 7. DASHBOARD UPDATE (1 min)
 ```
-Update scout_data.json:
+Update scout-dashboard-v2/public/scout_data.json:
 - Prospect counts by branch
 - Stage distribution
 - Activity log
