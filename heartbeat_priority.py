@@ -211,13 +211,26 @@ def run_heartbeat():
     deploy_result = task_auto_deploy()
     results['tasks']['deploy'] = deploy_result
     
-    # Final stats
+    # Final stats - calculate dynamically from prospects array
     data = load_data()
-    stats = data.get('stats', {})
+    prospects = data.get('prospects', [])
+    total_prospects = len(prospects)
+    contacted = len([p for p in prospects if p.get('stage') == 'Contacted'])
+    replied = len([p for p in prospects if p.get('stage') == 'Replied'])
+    
     log("-"*60)
-    log(f"📊 STATS: {stats.get('total_prospects', 0)} prospects | "
-        f"{stats.get('contacted', 0)} contacted | "
-        f"{stats.get('replied', 0)} replied")
+    log(f"📊 STATS: {total_prospects} prospects | "
+        f"{contacted} contacted | "
+        f"{replied} replied")
+    
+    # Also update the stats cache for other consumers
+    data['stats'] = {
+        'total_prospects': total_prospects,
+        'contacted': contacted,
+        'replied': replied,
+        'last_calculated': datetime.now().isoformat()
+    }
+    save_data(data)
     
     if deploy_result.get('deployed'):
         log("🌐 Streamlit Cloud will update in ~2 minutes", "deploy")
