@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Configuration
-DATA_FILE = Path("/root/.openclaw/workspace/scout_data.json")
+DATA_FILE = Path("/root/.openclaw/workspace/scout-dashboard-v2/public/scout_data.json")
 LOG_FILE = Path("/root/.openclaw/workspace/memory/heartbeat-log.jsonl")
 WORKSPACE = Path("/root/.openclaw/workspace")
 AGENTMAIL_API_KEY = os.getenv("AGENTMAIL_API_KEY", "")
