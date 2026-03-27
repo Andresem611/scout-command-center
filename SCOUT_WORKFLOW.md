@@ -131,6 +131,25 @@ Attempt 4+: ESCALATE — ask Andres for guidance or pivot
 
 ---
 
+## Infrastructure
+
+### Data Architecture (Single Source of Truth)
+| File | Purpose | Location |
+|:---|:---|:---|
+| `scout_data.json` | Pipeline prospects, stages, scores | `scout-dashboard-v2/public/scout_data.json` |
+| `scout_state.json` | Current task queue, retry tracker | Root workspace |
+| `draft_queue.json` | Email drafts (pending/approved/sent) | Root workspace |
+| `SCOUT_PLAYBOOK.md` | Wins, fails, patterns | Root workspace |
+
+**CRITICAL:** Always update the dashboard file path. The old root `scout_data.json` is deprecated.
+
+### Files Updated
+- `HEARTBEAT.md` — Now references correct dashboard path
+- `MEMORY.md` — Pipeline stats reflect actual counts
+- `sync_data.sh` — Validation script for data integrity
+
+---
+
 ## AUTONOMY BOUNDARIES
 
 **Never do without approval:**
