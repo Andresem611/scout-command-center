@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-03-28T22:14:26.297189",
+    "last_updated": "2026-03-28T22:45:16.639976",
     "version": "1.0"
   },
   "prospects": [
@@ -1644,7 +1644,7 @@
     "total_prospects": 147,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-28T22:14:26.297166"
+    "last_calculated": "2026-03-28T22:45:16.639954"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-27T03:15:11.075501",
