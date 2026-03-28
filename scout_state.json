@@ -1,11 +1,11 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-28T03:00:00Z",
+  "last_heartbeat": "2026-03-28T12:00:00Z",
   "current_task": {
     "type": "drafting",
     "target": "SF Mom Blogs",
-    "started_at": "2026-03-28T03:00:00Z",
+    "started_at": "2026-03-28T12:00:00Z",
     "retries": 0
   },
   "task_queue": [
@@ -25,10 +25,10 @@
     },
     {
       "priority": 3,
-      "type": "prospecting",
-      "target": "Mom Blogs - SF",
-      "status": "completed",
-      "found": 3
+      "type": "pending_approval",
+      "target": "TerriAnn, Christine Yun, Mathilda Traylor",
+      "status": "drafts_ready",
+      "count": 3
     }
   ],
   "retry_tracker": {
@@ -54,15 +54,15 @@
     },
     "blog_forms": {},
     "drafting": {
-      "completed": 6,
+      "completed": 9,
       "approved": 3,
-      "pending_approval": 3,
+      "pending_approval": 6,
       "pending_manual_send": 3
     }
   },
   "stats_this_session": {
     "prospects_found": 9,
-    "drafts_created": 6,
+    "drafts_created": 9,
     "drafts_approved": 3,
     "emails_sent": 0,
     "emails_pending_manual": 3,

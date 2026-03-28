@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "last_updated": "2026-03-28T11:14:54.757706",
-    "version": "1.0"
+    "last_updated": "2026-03-28T12:00:00Z",
+    "version": "1.3",
+    "updated_by": "scout-autonomous-drafting"
   },
   "prospects": [
     {
@@ -14,7 +15,8 @@
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "SF Bay Area family blog, tech/travel focus, direct email on contact page"
+      "scoreReason": "SF Bay Area family blog, tech/travel focus, direct email on contact page",
+      "draft_ready": true
     },
     {
       "name": "Christine Yun",
@@ -26,7 +28,8 @@
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Stylish SF city mom, 2 under 4, direct email in bio"
+      "scoreReason": "Stylish SF city mom, 2 under 4, direct email in bio",
+      "draft_ready": true
     },
     {
       "name": "Mathilda Traylor",
@@ -38,7 +41,8 @@
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "SF Bay Area travel/family lifestyle, managed by EMCPower"
+      "scoreReason": "SF Bay Area travel/family lifestyle, managed by EMCPower",
+      "draft_ready": true
     },
     {
       "name": "Sarah (MomsLA)",
@@ -1641,7 +1645,7 @@
     "total_prospects": 147,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-28T11:14:54.757685"
+    "last_calculated": "2026-03-28T11:44:09.470624"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-27T03:15:11.075501",
