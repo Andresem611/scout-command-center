@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "last_updated": "2026-03-29T03:14:23.439595",
-    "version": "1.0"
+    "last_updated": "2026-03-29T03:30:00Z",
+    "version": "1.4",
+    "updated_by": "scout-autonomous-drafting"
   },
   "prospects": [
     {
@@ -14,7 +15,8 @@
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Chicago suburbs mom blogger since 2008, mom of 3, established blog with active content"
+      "scoreReason": "Chicago suburbs mom blogger since 2008, mom of 3, established blog with active content",
+      "draft_ready": true
     },
     {
       "name": "Leyla (Second City Mom)",
@@ -26,7 +28,8 @@
       "type": "Nano",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Chicago lifestyle blogger, mom of 3, francophile, travel content, direct contact email"
+      "scoreReason": "Chicago lifestyle blogger, mom of 3, francophile, travel content, direct contact email",
+      "draft_ready": true
     },
     {
       "name": "Teresa (Tiaras & Tantrums)",
@@ -38,7 +41,8 @@
       "type": "Micro",
       "branch": "Mom Blogs",
       "score": 5,
-      "scoreReason": "Chicago area blogger, 18 years creating content, homeschool curriculum resources"
+      "scoreReason": "Chicago area blogger, 18 years creating content, homeschool curriculum resources",
+      "draft_ready": true
     },
     {
       "name": "TerriAnn (Cookies & Clogs)",

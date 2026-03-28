@@ -1,11 +1,11 @@
 {
   "session_id": "scout-main",
   "started_at": "2026-03-27T06:00:00Z",
-  "last_heartbeat": "2026-03-29T03:15:00Z",
+  "last_heartbeat": "2026-03-29T03:30:00Z",
   "current_task": {
-    "type": "prospecting",
-    "target": "Mom Blogs - Chicago",
-    "started_at": "2026-03-29T03:15:00Z",
+    "type": "drafting",
+    "target": "Chicago Mom Blogs",
+    "started_at": "2026-03-29T03:30:00Z",
     "retries": 0
   },
   "task_queue": [
@@ -32,10 +32,10 @@
     },
     {
       "priority": 4,
-      "type": "prospecting",
-      "target": "Mom Blogs - Chicago",
-      "status": "completed",
-      "found": 3
+      "type": "pending_approval",
+      "target": "Alicia, Leyla, Teresa",
+      "status": "drafts_ready",
+      "count": 3
     }
   ],
   "retry_tracker": {
@@ -67,15 +67,15 @@
     },
     "blog_forms": {},
     "drafting": {
-      "completed": 9,
+      "completed": 12,
       "approved": 3,
-      "pending_approval": 6,
+      "pending_approval": 9,
       "pending_manual_send": 3
     }
   },
   "stats_this_session": {
     "prospects_found": 12,
-    "drafts_created": 9,
+    "drafts_created": 12,
     "drafts_approved": 3,
     "emails_sent": 0,
     "emails_pending_manual": 3,
