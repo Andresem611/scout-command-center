@@ -1,9 +1,45 @@
 {
   "metadata": {
-    "last_updated": "2026-03-29T02:44:24.006223",
+    "last_updated": "2026-03-29T03:14:23.439595",
     "version": "1.0"
   },
   "prospects": [
+    {
+      "name": "Alicia (Making Time For Mommy)",
+      "handle": "makingtimeformommy",
+      "followers": 24700,
+      "city": "Chicago",
+      "email": "makingtimeformommy@gmail.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "Chicago suburbs mom blogger since 2008, mom of 3, established blog with active content"
+    },
+    {
+      "name": "Leyla (Second City Mom)",
+      "handle": "secondcitymom",
+      "followers": 15000,
+      "city": "Chicago",
+      "email": "contact@secondcitymom.com",
+      "stage": "Prospected",
+      "type": "Nano",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "Chicago lifestyle blogger, mom of 3, francophile, travel content, direct contact email"
+    },
+    {
+      "name": "Teresa (Tiaras & Tantrums)",
+      "handle": "tiarastantrums",
+      "followers": 37500,
+      "city": "Chicago",
+      "email": "tiarastantrums@gmail.com",
+      "stage": "Prospected",
+      "type": "Micro",
+      "branch": "Mom Blogs",
+      "score": 5,
+      "scoreReason": "Chicago area blogger, 18 years creating content, homeschool curriculum resources"
+    },
     {
       "name": "TerriAnn (Cookies & Clogs)",
       "handle": "cookiesandclogs",
@@ -1644,7 +1680,7 @@
     "total_prospects": 147,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-29T02:44:24.006200"
+    "last_calculated": "2026-03-29T03:14:23.439566"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-27T03:15:11.075501",
