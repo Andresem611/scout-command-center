@@ -136,21 +136,19 @@ Medium (~4h/day) via heartbeat cycles
 | Step | Status |
 |:---|:---|
 | Sign up at agentmail.to | ✅ Active |
-| Get API key | ✅ am_us_inbox_8528...ab85d |
+| Get API key | ✅ am_us_... |
 | Create inbox (keri@agentmail.to) | ✅ Active |
 | Test send | ✅ Delivered 2026-03-20 |
 | **Heartbeat integration** | ✅ **Implemented 2026-03-30** |
-| **Inbox checking** | ⏳ **Awaiting API key config** |
-| **Auto-send approved drafts** | ⏳ **Awaiting API key config** |
+| **Inbox checking** | ✅ **ACTIVE — checking every 30 min** |
+| **Auto-send approved drafts** | ✅ **ACTIVE — sends on approval** |
 
-### Configuration Required
-To activate AgentMail in heartbeat:
-```bash
-export AGENTMAIL_API_KEY="your_key_here"
-export AGENTMAIL_INBOX_ID="keri@agentmail.to"
-```
+### Configuration
+Stored in `.env` file (secured with 600 permissions):
+- AGENTMAIL_API_KEY
+- AGENTMAIL_INBOX_ID=keri@agentmail.to
 
-Or add to `~/.bashrc` for persistence.
+**Note:** API key is never logged or displayed. Stored in `.env` file only.
 
 ### Cost
 | Tier | Price | Inboxes | Emails/Month | When |
