@@ -1,0 +1,4 @@
+{"timestamp": "2026-03-30T03:54:05.608056", "email": "bounced1@gmail.com", "bounce_type": "bounce", "reason": "Mailbox does not exist", "provider": "unknown"}
+{"timestamp": "2026-03-30T03:54:05.608231", "email": "bounced2@yahoo.com", "bounce_type": "invalid_email", "reason": "Invalid user", "provider": "unknown"}
+{"timestamp": "2026-03-30T03:54:05.608338", "email": "bounce@tempmail.com", "bounce_type": "spam", "reason": "Marked as spam", "provider": "unknown"}
+{"timestamp": "2026-03-30T03:54:05.608427", "email": "soft@example.com", "bounce_type": "deferral", "reason": "Temporary failure", "provider": "unknown"}

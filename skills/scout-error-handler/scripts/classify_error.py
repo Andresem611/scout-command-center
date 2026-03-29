@@ -111,7 +111,7 @@ ERROR_PATTERNS = {
     },
     ErrorType.DATA_ERROR: {
         "patterns": [
-            r"validation.*error",
+            r"validation.*(error|failed)",
             r"invalid.*(data|format|input)",
             r"required.*field",
             r"schema.*error",
@@ -121,6 +121,7 @@ ERROR_PATTERNS = {
             r"400",
             r"json.*error",
             r"type.*error",
+            r"format invalid",
         ],
         "severity": Severity.MEDIUM,
         "retryable": False,

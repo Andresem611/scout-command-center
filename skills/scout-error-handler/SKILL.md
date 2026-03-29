@@ -134,3 +134,14 @@ if result.returncode != 0:
   "context": "email_outreach"
 }
 ```
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **Network/API/Rate = retry with backoff** — 2s → 4s → 8s
+2. **Auth/Data = escalate immediately** — Never retry auth failures
+3. **Log everything for patterns** — error_log.json for analysis
+4. **Max 3 retries then escalate** — Don't loop forever
+5. 

@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "created": "2026-03-30T03:54:01.105540",
+  "last_updated": "2026-03-30T03:54:05.608504",
+  "description": "Thoven email blacklist - addresses that should not be contacted",
+  "domains": {
+    "example.com": {
+      "count": 1,
+      "last_bounce": "2026-03-30T03:54:01.105571"
+    },
+    "gmail.com": {
+      "count": 1,
+      "last_bounce": "2026-03-30T03:54:05.608196"
+    },
+    "yahoo.com": {
+      "count": 1,
+      "last_bounce": "2026-03-30T03:54:05.608311"
+    },
+    "tempmail.com": {
+      "count": 1,
+      "last_bounce": "2026-03-30T03:54:05.608398"
+    }
+  },
+  "emails": {
+    "bad@example.com": {
+      "reason": "Test bounce",
+      "bounce_type": "bounce",
+      "date_added": "2026-03-30T03:54:01.105564",
+      "bounce_count": 1,
+      "provider": null
+    },
+    "bounced1@gmail.com": {
+      "reason": "Mailbox does not exist",
+      "bounce_type": "bounce",
+      "date_added": "2026-03-30T03:54:05.608186",
+      "bounce_count": 1,
+      "provider": null
+    },
+    "bounced2@yahoo.com": {
+      "reason": "Invalid user",
+      "bounce_type": "invalid_email",
+      "date_added": "2026-03-30T03:54:05.608304",
+      "bounce_count": 1,
+      "provider": null
+    },
+    "bounce@tempmail.com": {
+      "reason": "Marked as spam",
+      "bounce_type": "spam",
+      "date_added": "2026-03-30T03:54:05.608392",
+      "bounce_count": 1,
+      "provider": null
+    }
+  },
+  "patterns": [],
+  "stats": {
+    "total_blacklisted": 8,
+    "domain_blocks": 4,
+    "email_blocks": 4
+  }
+}

@@ -139,3 +139,14 @@ python3 scripts/score_prospect.py --file prospect.json
 - No contact info and no website
 - Inactive >90 days
 - Content misaligned (adult-only, controversial)
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **Search beats browser for $439 runway** — Instagram/TikTok login walls block browser approach; kimi_search + website extraction is viable
+2. **Cross-reference "[name] contact" finds hidden emails** — Press pages and collaboration links often have emails not in bios
+3. **Score 4+ = A-tier worth immediate draft** — Don't queue low scores; focus energy on high-fit prospects
+4. **Blog forms often easier than direct email** — Mom blogs have contact forms ready; homeschool influencers prefer DMs
+5. **No single city >30% of pipeline** — Spread across cities to reduce geographic risk

@@ -22,7 +22,7 @@ import time
 import json
 import subprocess
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -35,7 +35,7 @@ LOG_FILE = Path("/root/.openclaw/workspace/skills/scout-error-handler/error_log.
 def log_attempt(attempt: int, max_retries: int, command: str, success: bool, error_msg: str = ""):
     """Log retry attempt to error_log.json."""
     log_entry = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).replace(tzinfo=timezone.utc).isoformat().replace("+00:00", "Z"),
         "error_type": "RETRY_ATTEMPT",
         "severity": "medium" if not success else "low",
         "message": f"Attempt {attempt}/{max_retries}: {'SUCCESS' if success else 'FAILED'}",

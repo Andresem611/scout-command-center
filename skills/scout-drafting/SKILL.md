@@ -90,3 +90,14 @@ Load these when needed:
 - **[email-templates.md](references/email-templates.md)** — Base templates and variables
 - **[thoven-positioning.md](references/thoven-positioning.md)** — Key messages, voice, what NOT to say
 - **[personalization-patterns.md](references/personalization-patterns.md)** — How to research and personalize authentically
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **Homeschool angle converts 2x for ESA states** — Lead with ESA eligibility in AZ, FL, UT
+2. **Reference specific post, not generic praise** — "Your post about chaotic mornings" > "Love your content"
+3. **Keri's voice: warm, direct, educator-first** — Not salesy; focus on helping families
+4. **Day 7 follow-up needs NEW angle** — Not just a bump; add value (feature, testimonial, different benefit)
+5. **Fit score 65+ = auto-select template** — Below 65, flag for manual review

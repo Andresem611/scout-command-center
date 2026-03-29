@@ -98,3 +98,14 @@ python3 scripts/sync_dashboard.py [--data-path PATH]
 - Validates all prospect records against schema
 - Fills missing computed fields
 - Reports inconsistencies found
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **No backward stage moves** — Forward only: Prospected → Contacted → Replied → Negotiating → Partner
+2. **Stale >14 days = flag for re-engagement or drop** — Don't let prospects sit; make a decision
+3. **Sync before any deploy** — scout_data.json must be valid before Vercel build
+4. **Terminal stages: Partner, Declined** — No further action needed; archive learnings
+5. **Validate data weekly** — Run validator before Monday morning batch

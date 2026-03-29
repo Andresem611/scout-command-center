@@ -89,3 +89,14 @@ Prospects CSV/JSON expected fields:
   "notes": "Context from initial research"
 }
 ```
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **Same thread reference required** — All follow-ups reference original email
+2. **Day 7 must add value, not just bump** — New angle (feature, testimonial, ESA update)
+3. **After Day 14 = mark Cold, stop forever** — Respect boundaries, don't spam
+4. **Follow-ups appear in Morning Batch** — Never auto-send; always await approval
+5. 

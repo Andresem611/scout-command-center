@@ -65,3 +65,14 @@ See [references/api-routes.md](references/api-routes.md) for full specs.
 - `scripts/check_status.py` — Health check
 - `references/vercel-setup.md` — Vercel configuration
 - `references/api-routes.md` — API documentation
+
+
+---
+
+## 🔑 KEY LEARNINGS (Max 5)
+
+1. **Always commit before deploy** — Uncommitted changes cause sync issues
+2. **Vercel not Streamlit** — Next.js stack; .next/ folder, not Streamlit server
+3. **Hard refresh browser after deploy** — Cache shows old version otherwise
+4. **Sync data before build** — scout_data.json must be fresh
+5. 
