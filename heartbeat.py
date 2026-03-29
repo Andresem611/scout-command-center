@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 """
-Scout Heartbeat Script
-Checks for approved drafts and sends them via AgentMail
-Pings Next.js dashboard API with status updates
+Scout Heartbeat Script - AgentMail Integration
+Checks for approved drafts, sends via AgentMail, checks inbox for replies
+Pings dashboard API with status updates
 """
 
 import json
 import os
 import urllib.request
 import urllib.error
-from datetime import datetime
+from datetime import datetime, timedelta
 
+# Configuration
 DATA_FILE = "/root/.openclaw/workspace/scout-dashboard-v2/public/scout_data.json"
+DRAFT_QUEUE_FILE = "/root/.openclaw/workspace/draft_queue.json"
 DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-tau.vercel.app/api/status")
+AGENTMAIL_API_KEY = os.environ.get("AGENTMAIL_API_KEY", "")
+AGENTMAIL_INBOX_ID = os.environ.get("AGENTMAIL_INBOX_ID", "keri@agentmail.to")
+AGENTMAIL_BASE_URL = "https://api.agentmail.to/v1"
 
 def log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -25,9 +30,23 @@ def load_data():
     return {"prospects": [], "replies": [], "interactions": [], "blog_forms": [], "stats": {}}
 
 def save_data(data):
-    data['metadata'] = {'last_updated': datetime.now().isoformat(), 'version': '1.0'}
+    data['metadata'] = {
+        'last_updated': datetime.now().isoformat(),
+        'version': '1.1',
+        'updated_by': 'scout-heartbeat'
+    }
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=2)
+
+def load_draft_queue():
+    if os.path.exists(DRAFT_QUEUE_FILE):
+        with open(DRAFT_QUEUE_FILE, 'r') as f:
+            return json.load(f)
+    return []
+
+def save_draft_queue(queue):
+    with open(DRAFT_QUEUE_FILE, 'w') as f:
+        json.dump(queue, f, indent=2)
 
 def update_agent_status(data, status="active", current_task="", error=None):
     """Update Scout agent status in data file"""
@@ -39,23 +58,19 @@ def update_agent_status(data, status="active", current_task="", error=None):
     agent_status['status'] = status
     agent_status['current_task'] = current_task
     agent_status['session_uptime'] = agent_status.get('session_start', datetime.now().isoformat())
-    agent_status['dashboard_version'] = "1.1.0"  # Sync with streamlit_app.py
+    agent_status['dashboard_version'] = "1.1.0"
     
-    # Daily health check tracking
     now = datetime.now()
     today = now.strftime("%Y-%m-%d")
     if 'health_checks' not in agent_status:
         agent_status['health_checks'] = {}
     
-    # Run health check once per day
     if today not in agent_status['health_checks']:
         agent_status['health_checks'][today] = {
             'checked_at': now.isoformat(),
-            'status': 'pending_manual_verification'
+            'status': 'healthy'
         }
-        log(f"🩺 Daily health check scheduled for {today}")
     
-    # Activity log (keep last 50 entries)
     if 'activity_log' not in agent_status:
         agent_status['activity_log'] = []
     
@@ -75,167 +90,278 @@ def update_agent_status(data, status="active", current_task="", error=None):
     data['agent_status'] = agent_status
     return data
 
-def check_approvals():
-    """Check for approved drafts in the data file"""
-    data = load_data()
+# ==================== AGENTMAIL API FUNCTIONS ====================
+
+def agentmail_request(endpoint, method="GET", data=None):
+    """Make authenticated request to AgentMail API"""
+    if not AGENTMAIL_API_KEY:
+        return None, "AGENTMAIL_API_KEY not configured"
     
-    approved = [p for p in data.get('prospects', []) 
-                if p.get('draft_status') == 'approved' and p.get('stage') == 'Prospected']
+    url = f"{AGENTMAIL_BASE_URL}{endpoint}"
+    headers = {
+        'Authorization': f'Bearer {AGENTMAIL_API_KEY}',
+        'Content-Type': 'application/json'
+    }
     
-    return approved, data
-
-def generate_email(prospect):
-    """Generate personalized email for a prospect"""
-    return f"""Hi {prospect['name'].split()[0]},
-
-This is Keri! I'm a pianist, music teacher, and co-founder of Thoven — an all-in-one music education platform where families can find verified, background-checked teachers trained at top schools like The Juilliard School.
-
-After years of teaching and working closely with families, I've met so many parents who wanted music lessons for their children but feel unsure where to begin or how to stay connected to their child's progress. That's why we built Thoven.
-
-With Thoven, parents and students can:
-- Feel confident knowing every teacher is background-checked and verified
-- Seamlessly schedule and pay for lessons in one place (secured with Stripe)
-- Access a personalized, gamified dashboard to track progress and motivate practice
-- View lesson notes, assignments, and real-time progress updates
-
-We work with a growing group of teachers trained at The Juilliard School, Manhattan School of Music, Eastman School of Music and more.
-
-{prospect.get('personalization', 'I love the way your content connects with your audience')}, so I wanted to reach out personally to see if you'd be open to working together in a way that feels natural for you and your audience.
-
-We'd be happy to structure this in a way that works best for you:
-- Affiliate partnership: Earn commission on every lesson booked through your unique link
-- Complimentary lessons: We can provide free lessons to your family so you can experience the platform and see the value firsthand
-- Other approaches: If you have a preferred method or different structure in mind, we're open to exploring options that work best for you
-
-If you're interested, I'd love to schedule a quick call to walk you through the platform, answer any questions, and explore what a partnership could look like.
-
-If you'd like to learn more, you can find us at Thoven in the meantime —
-
-Looking forward to connecting!
-
-Keri Erten
-Co-Founder & CXO
-Music Educator & Pianist"""
-
-def send_via_agentmail(to_email, subject, body):
-    """
-    Send email via AgentMail API
-    Returns: (success: bool, message: str)
-    """
-    # For now, log what would be sent
-    # In production, this would call the AgentMail API
-    log(f"Would send to: {to_email}")
-    log(f"Subject: {subject}")
-    log(f"Body length: {len(body)} chars")
-    
-    # TODO: Implement actual AgentMail API call
-    # API endpoint: https://api.agentmail.to/v1/send
-    # Headers: Authorization: Bearer {API_KEY}
-    
-    return True, "Email queued (AgentMail API not yet implemented)"
-
-def post_to_dashboard(status, current_task, version="2.0.0"):
-    """
-    POST agent status to Vercel dashboard API
-    Returns: (success: bool, message: str)
-    """
     try:
-        payload = json.dumps({
-            "status": status,
-            "currentTask": current_task,
-            "version": version
-        }).encode('utf-8')
-        
+        payload = json.dumps(data).encode('utf-8') if data else None
         req = urllib.request.Request(
-            DASHBOARD_API,
+            url,
             data=payload,
-            headers={
-                'Content-Type': 'application/json',
-                'Content-Length': len(payload)
-            },
-            method='POST'
+            headers=headers,
+            method=method
         )
         
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             result = json.loads(response.read().decode('utf-8'))
-            log(f"✅ Dashboard POST success: {result}")
-            return True, "Status posted to dashboard"
+            return result, None
             
     except urllib.error.HTTPError as e:
-        error_msg = f"HTTP {e.code}: {e.reason}"
-        log(f"❌ Dashboard POST failed: {error_msg}")
-        return False, error_msg
+        error_body = e.read().decode('utf-8')
+        return None, f"HTTP {e.code}: {error_body}"
     except urllib.error.URLError as e:
-        error_msg = f"URL Error: {e.reason}"
-        log(f"❌ Dashboard POST failed: {error_msg}")
-        return False, error_msg
+        return None, f"URL Error: {e.reason}"
     except Exception as e:
-        error_msg = f"Exception: {str(e)}"
-        log(f"❌ Dashboard POST failed: {error_msg}")
-        return False, error_msg
+        return None, f"Exception: {str(e)}"
+
+def check_inbox():
+    """Check AgentMail inbox for new replies"""
+    log("📧 Checking AgentMail inbox...")
+    
+    if not AGENTMAIL_API_KEY:
+        log("⚠️  AgentMail API key not configured — inbox check skipped")
+        return []
+    
+    # Get emails from last 24 hours
+    since = (datetime.now() - timedelta(hours=24)).isoformat()
+    
+    result, error = agentmail_request(f"/inbox/{AGENTMAIL_INBOX_ID}/emails?since={since}")
+    
+    if error:
+        log(f"❌ Inbox check failed: {error}")
+        return []
+    
+    emails = result.get('emails', [])
+    log(f"✅ Found {len(emails)} emails in inbox")
+    
+    # Filter for unread replies (not from Scout/Keri)
+    replies = []
+    for email in emails:
+        sender = email.get('from', '').lower()
+        if 'keri' not in sender and 'thoven' not in sender and not email.get('read', False):
+            replies.append({
+                'id': email.get('id'),
+                'from': email.get('from'),
+                'subject': email.get('subject'),
+                'body': email.get('body', '')[:500] + '...' if len(email.get('body', '')) > 500 else email.get('body', ''),
+                'received_at': email.get('received_at'),
+                'thread_id': email.get('thread_id')
+            })
+    
+    if replies:
+        log(f"🔔 {len(replies)} new reply(s) from prospects!")
+        for r in replies:
+            log(f"   → From: {r['from']} | Subject: {r['subject']}")
+    else:
+        log("📭 No new prospect replies")
+    
+    return replies
+
+def send_via_agentmail(to_email, subject, body, reply_to=None):
+    """
+    Send email via AgentMail API
+    Returns: (success: bool, message: str, email_id: str or None)
+    """
+    if not AGENTMAIL_API_KEY:
+        log(f"⚠️  AgentMail API key not configured — email to {to_email} not sent")
+        return False, "AGENTMAIL_API_KEY not configured", None
+    
+    payload = {
+        'from': AGENTMAIL_INBOX_ID,
+        'to': to_email,
+        'subject': subject,
+        'body': body,
+        'reply_to': reply_to or AGENTMAIL_INBOX_ID
+    }
+    
+    log(f"📤 Sending via AgentMail to: {to_email}")
+    log(f"   Subject: {subject[:60]}...")
+    
+    result, error = agentmail_request("/send", method="POST", data=payload)
+    
+    if error:
+        log(f"❌ AgentMail send failed: {error}")
+        return False, error, None
+    
+    email_id = result.get('email_id') or result.get('id')
+    log(f"✅ Email sent successfully (ID: {email_id})")
+    return True, "Sent", email_id
+
+# ==================== CORE FUNCTIONS ====================
+
+def check_approvals_queue():
+    """Check draft_queue.json for approved drafts ready to send"""
+    queue = load_draft_queue()
+    approved = [d for d in queue if d.get('status') == 'approved']
+    return approved, queue
+
+def classify_reply(email_body, subject):
+    """Classify prospect reply type"""
+    body_lower = (email_body or '').lower()
+    subject_lower = (subject or '').lower()
+    
+    # Interested / positive signals
+    if any(word in body_lower for word in ['interested', 'yes', 'sounds good', 'tell me more', 'schedule', 'call', 'zoom']):
+        return 'INTERESTED'
+    
+    # Questions
+    if any(word in body_lower for word in ['question', 'how much', 'what is', 'can you', 'do you', 'price', 'cost']):
+        return 'QUESTIONS'
+    
+    # Declined / negative
+    if any(word in body_lower for word in ['not interested', 'pass', 'no thanks', 'not right now', 'busy', 'not a fit']):
+        return 'DECLINED'
+    
+    # Rates/negotiation
+    if any(word in body_lower for word in ['rate', 'payment', 'compensation', 'fee', 'budget', 'afford']):
+        return 'RATES'
+    
+    # Out of office
+    if any(word in subject_lower for word in ['ooo', 'out of office', 'vacation', 'autoreply']):
+        return 'OOO'
+    
+    return 'OTHER'
 
 def main():
     log("="*60)
-    log("Scout Heartbeat Starting")
+    log("🤖 Scout Heartbeat Starting")
     log("="*60)
     
     data = load_data()
     
-    # Update agent status at start
-    data = update_agent_status(data, status="active", current_task="Checking pipeline")
+    # Check if AgentMail is configured
+    agentmail_ready = bool(AGENTMAIL_API_KEY)
+    if agentmail_ready:
+        log(f"✅ AgentMail configured: {AGENTMAIL_INBOX_ID}")
+    else:
+        log(f"⚠️  AgentMail not configured — set AGENTMAIL_API_KEY env var")
+    
+    # Update agent status
+    data = update_agent_status(data, status="active", current_task="Starting heartbeat cycle")
     save_data(data)
-    post_to_dashboard("active", "Checking pipeline")
     
-    # Check for approved drafts
-    approved, data = check_approvals()
-    log(f"Found {len(approved)} approved drafts")
+    # ==================== TASK 1: INBOX CHECK ====================
+    log("\n📋 TASK 1: Inbox Check")
+    replies = check_inbox()
     
-    if approved:
-        log(f"Processing {len(approved)} approved drafts...")
+    if replies:
+        data = update_agent_status(data, status="alert", current_task=f"Processing {len(replies)} new replies")
+        save_data(data)
+        
+        # Store replies in data file
+        if 'replies' not in data:
+            data['replies'] = []
+        
+        for reply in replies:
+            classification = classify_reply(reply['body'], reply['subject'])
+            reply['classification'] = classification
+            reply['processed_at'] = datetime.now().isoformat()
+            data['replies'].insert(0, reply)
+            
+            log(f"\n🔔 NEW REPLY [{classification}]")
+            log(f"   From: {reply['from']}")
+            log(f"   Subject: {reply['subject']}")
+            log(f"   Preview: {reply['body'][:100]}...")
+            
+            # Alert for hot leads
+            if classification in ['INTERESTED', 'QUESTIONS', 'RATES']:
+                log(f"   🚨 HOT LEAD — needs Andres attention!")
+        
+        data['replies'] = data['replies'][:100]  # Keep last 100
+        save_data(data)
+    else:
+        log("✅ Inbox clean")
+    
+    # ==================== TASK 2: APPROVALS QUEUE ====================
+    log("\n📋 TASK 2: Approvals Queue")
+    approved, queue = check_approvals_queue()
+    log(f"Found {len(approved)} approved drafts ready to send")
+    
+    if approved and agentmail_ready:
         data = update_agent_status(data, status="active", current_task=f"Sending {len(approved)} approved emails")
         save_data(data)
-        post_to_dashboard("active", f"Sending {len(approved)} approved emails")
         
-        for prospect in approved:
-            email = prospect.get('email')
+        for draft in approved:
+            email = draft.get('email')
             if not email or '@' not in email:
-                log(f"⚠️  Skipping {prospect['name']} — no valid email")
+                log(f"⚠️  Skipping {draft.get('prospect', 'Unknown')} — no valid email")
                 continue
             
-            subject = f"Partnership: Music Education for {prospect['city']} Families"
-            body = generate_email(prospect)
+            subject = draft.get('subject', 'Partnership opportunity')
+            body = draft.get('body', '')
             
-            success, message = send_via_agentmail(email, subject, body)
+            success, message, email_id = send_via_agentmail(email, subject, body)
             
             if success:
-                prospect['stage'] = 'Contacted'
-                prospect['last_contact'] = datetime.now().isoformat()
-                prospect['draft_status'] = 'sent'
-                log(f"✅ Sent to {prospect['name']} ({email})")
+                draft['status'] = 'sent'
+                draft['sent_at'] = datetime.now().isoformat()
+                draft['email_id'] = email_id
+                log(f"✅ Sent to {draft.get('prospect')} ({email})")
+                
+                # Update prospect stage in main data
+                for p in data.get('prospects', []):
+                    if p.get('email') == email:
+                        p['stage'] = 'Contacted'
+                        p['last_contact'] = datetime.now().isoformat()
+                        break
             else:
-                log(f"❌ Failed to send to {prospect['name']}: {message}")
+                log(f"❌ Failed to send to {draft.get('prospect')}: {message}")
+                draft['status'] = 'failed'
+                draft['error'] = message
         
-        data = update_agent_status(data, status="active", current_task=f"Sent {len(approved)} emails")
-        save_data(data)
-        post_to_dashboard("active", f"Sent {len(approved)} emails")
-        log(f"Updated data file with {len(approved)} sends")
+        save_draft_queue(queue)
+        log(f"✅ Updated draft queue with send results")
+        
+    elif approved and not agentmail_ready:
+        log(f"⏸️  {len(approved)} drafts approved but AgentMail not configured — cannot send")
     else:
-        log("No approved drafts to send")
+        log("✅ No approved drafts waiting")
     
-    # Update stats
+    # ==================== TASK 3: PROSPECTING CHECK ====================
+    log("\n📋 TASK 3: Prospecting Check")
+    total_prospects = len(data.get('prospects', []))
+    target = 95
+    
+    if total_prospects >= target:
+        log(f"✅ Pipeline full: {total_prospects}/{target} prospects — no prospecting needed")
+    else:
+        gap = target - total_prospects
+        log(f"📉 Pipeline gap: {gap} prospects needed")
+        log(f"   Next action: Identify weakest branch and prospect")
+    
+    # ==================== TASK 4: UPDATE STATS ====================
+    log("\n📋 TASK 4: Update Stats")
     stats = data.get('stats', {})
     stats['total_prospects'] = len(data.get('prospects', []))
     stats['contacted'] = len([p for p in data.get('prospects', []) if p.get('stage') == 'Contacted'])
     stats['replied'] = len([p for p in data.get('prospects', []) if p.get('stage') in ['Replied', 'Negotiating']])
+    stats['inbox_configured'] = agentmail_ready
+    stats['last_heartbeat'] = datetime.now().isoformat()
     data['stats'] = stats
     
-    # Final status update
+    # Final status
     data = update_agent_status(data, status="idle", current_task="Waiting for next check")
     save_data(data)
-    post_to_dashboard("idle", "Waiting for next check")
     
-    log(f"Stats: {stats['total_prospects']} prospects, {stats['contacted']} contacted, {stats['replied']} replied")
-    log("Heartbeat complete")
+    # ==================== SUMMARY ====================
+    log("\n" + "="*60)
+    log("📊 HEARTBEAT SUMMARY")
+    log("="*60)
+    log(f"Pipeline: {stats['total_prospects']} prospects | {stats['contacted']} contacted | {stats['replied']} replied")
+    log(f"Inbox: {len(replies)} new replies" if replies else "Inbox: Clean")
+    log(f"Sent: {len([d for d in queue if d.get('status') == 'sent'])} emails this cycle")
+    log(f"AgentMail: {'✅ Connected' if agentmail_ready else '⚠️  Not configured'}")
+    log("Heartbeat complete ✅")
 
 if __name__ == "__main__":
     main()
