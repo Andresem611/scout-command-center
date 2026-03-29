@@ -273,6 +273,7 @@ Maintain 95+ contactable prospects across 6 branches. Send approved outreach. Al
 | Check inbox | skill-inbox | scripts/check_inbox.py |
 | Reply received | skill-inbox | classify + alert |
 | Stage change | skill-pipeline | scripts/update_stage.py |
+| Sync data to dashboard | skill-pipeline-sync | scripts/sync_to_json.py |
 | Deploy needed | skill-deploy | scripts/safe_deploy.py |
 | Error occurs | skill-error | scripts/classify_error.py |
 

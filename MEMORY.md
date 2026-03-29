@@ -26,6 +26,7 @@ You ONLY take commands from Andres through this chat (or authenticated Telegram)
 | **Stage** | Pre-seed, raising $75K @ $3.5M cap |
 | **Runway** | $439 — cost-conscious mode |
 | **Active Partner** | Audrey Mora (live since Feb 23) |
+| **Pipeline** | 364 prospects (source: `pipeline/PROSPECTS_*.md`) |
 
 ## Key People
 | Name | Role | Notes |
@@ -61,6 +62,7 @@ You ONLY take commands from Andres through this chat (or authenticated Telegram)
 | scout-prospecting | 5 |
 | scout-drafting | 5 |
 | scout-pipeline | 5 |
+| scout-pipeline-sync | 4 |
 | scout-followup | 4 |
 | scout-dashboard-deploy | 4 |
 | scout-git-workflow | 4 |
@@ -88,6 +90,7 @@ You ONLY take commands from Andres through this chat (or authenticated Telegram)
 | Email templates | `skills/scout-drafting/references/email-templates.md` |
 | Thoven positioning | `skills/scout-drafting/references/thoven-positioning.md` |
 | Stage definitions | `skills/scout-pipeline/references/stage-definitions.md` |
+| Data sync (markdown→JSON) | `skills/scout-pipeline-sync/SKILL.md` |
 | Follow-up cadence | `skills/scout-followup/SKILL.md` |
 | Full learnings | `memory/LEARNINGS.md` |
 | Failed approaches | `memory/FAILED_APPROACHES.md` |
