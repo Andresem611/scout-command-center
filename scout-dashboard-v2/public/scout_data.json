@@ -310,7 +310,7 @@
     },
     {
       "id": "mia-miamiconhi-022",
-      "name": "Anne Marie León",
+      "name": "Anne Marie Le\u00f3n",
       "handle": "@miamiconhijos",
       "followers": 258000,
       "contact_email": "miamiconhijos@gmail.com",
@@ -352,7 +352,7 @@
     },
     {
       "id": "mia-carlanunez-025",
-      "name": "Carla Nuñez",
+      "name": "Carla Nu\u00f1ez",
       "handle": "@carlanunez_",
       "followers": 128000,
       "contact_email": "info@carlapnunez.com",
@@ -576,7 +576,7 @@
     },
     {
       "id": "mia-smadjita-041",
-      "name": "Stéphanie Smadja",
+      "name": "St\u00e9phanie Smadja",
       "handle": "@smadjita",
       "followers": 17000,
       "contact_email": "smadjita@gmail.com",
@@ -2900,7 +2900,7 @@
     },
     {
       "id": "unk-miamiconhi-207",
-      "name": "Anne Marie León",
+      "name": "Anne Marie Le\u00f3n",
       "handle": "@miamiconhijos",
       "followers": 258000,
       "contact_email": "Macro",
@@ -2942,7 +2942,7 @@
     },
     {
       "id": "unk-carlanunez-210",
-      "name": "Carla Nuñez",
+      "name": "Carla Nu\u00f1ez",
       "handle": "@carlanunez_",
       "followers": 128000,
       "contact_email": "Macro",
@@ -3138,7 +3138,7 @@
     },
     {
       "id": "unk-smadjita-224",
-      "name": "Stéphanie Smadja",
+      "name": "St\u00e9phanie Smadja",
       "handle": "@smadjita",
       "followers": 17000,
       "contact_email": "Micro",
@@ -5098,38 +5098,13 @@
     }
   ],
   "metadata": {
-    "last_updated": "2026-03-30T04:37:34.994366",
-    "version": "1.0",
-    "source_files": [
-      "PROSPECTS_GEO_2026-03-26.md",
-      "PROSPECTS_2026-03-26.md"
-    ]
+    "last_updated": "2026-03-30T04:44:08.021043",
+    "version": "1.0"
   },
   "stats": {
     "total_prospects": 364,
-    "by_stage": {
-      "Prospected": 363,
-      "Partner": 1
-    },
-    "by_city": {
-      "NYC": 21,
-      "Miami": 33,
-      "LA": 22,
-      "SF/Bay Area": 15,
-      "Houston": 20,
-      "Dallas": 9,
-      "Austin": 20,
-      "Chicago": 44,
-      "NYC/LA": 1,
-      "Unknown": 179
-    },
-    "by_branch": {
-      "Mom Influencers": 342,
-      "Mom Blog": 5,
-      "Homeschool": 17
-    },
-    "contacted": 1,
-    "replied": 1,
-    "last_calculated": "2026-03-30T04:37:34.994247"
+    "contacted": 0,
+    "replied": 0,
+    "last_calculated": "2026-03-30T04:44:08.021033"
   }
 }
