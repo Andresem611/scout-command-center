@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "last_updated": "2026-03-30T02:16:14.776814",
-    "version": "1.0"
+    "last_updated": "2026-03-30T02:38:43.696855",
+    "version": "1.1",
+    "updated_by": "scout-heartbeat"
   },
   "prospects": [
     {
@@ -1683,13 +1684,23 @@
     "total_prospects": 150,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-30T02:16:14.776804"
+    "last_calculated": "2026-03-30T02:16:14.776804",
+    "inbox_configured": true,
+    "last_heartbeat": "2026-03-30T02:38:43.696828"
   },
   "agent_status": {
-    "last_heartbeat": "2026-03-27T03:15:11.075501",
+    "last_heartbeat": "2026-03-30T02:38:43.696839",
     "status": "idle",
     "current_task": "Waiting for next check",
     "activity_log": [
+      {
+        "time": "2026-03-30T02:38:43.696850",
+        "task": "Waiting for next check"
+      },
+      {
+        "time": "2026-03-30T02:38:43.465343",
+        "task": "Starting heartbeat cycle"
+      },
       {
         "time": "2026-03-27T03:15:11.075534",
         "task": "Waiting for next check"
@@ -1703,12 +1714,16 @@
         "task": "Agent panel initialized"
       }
     ],
-    "session_uptime": "2026-03-27T03:15:11.075514",
+    "session_uptime": "2026-03-30T02:38:43.696842",
     "dashboard_version": "1.1.0",
     "health_checks": {
       "2026-03-27": {
         "checked_at": "2026-03-27T03:15:10.937928",
         "status": "pending_manual_verification"
+      },
+      "2026-03-30": {
+        "checked_at": "2026-03-30T02:38:43.465338",
+        "status": "healthy"
       }
     }
   }

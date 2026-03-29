@@ -15,9 +15,24 @@ from datetime import datetime, timedelta
 DATA_FILE = "/root/.openclaw/workspace/scout-dashboard-v2/public/scout_data.json"
 DRAFT_QUEUE_FILE = "/root/.openclaw/workspace/draft_queue.json"
 DASHBOARD_API = os.environ.get("DASHBOARD_API_URL", "https://scout-dashboard-tau.vercel.app/api/status")
+AGENTMAIL_BASE_URL = "https://api.agentmail.to"
+
+def load_env():
+    """Load environment variables from .env file"""
+    env_path = "/root/.openclaw/workspace/.env"
+    if os.path.exists(env_path):
+        with open(env_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and '=' in line and not line.startswith('#'):
+                    key, value = line.split('=', 1)
+                    os.environ[key] = value
+
+# Load .env file
+load_env()
+
 AGENTMAIL_API_KEY = os.environ.get("AGENTMAIL_API_KEY", "")
 AGENTMAIL_INBOX_ID = os.environ.get("AGENTMAIL_INBOX_ID", "keri@agentmail.to")
-AGENTMAIL_BASE_URL = "https://api.agentmail.to/v1"
 
 def log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -132,30 +147,33 @@ def check_inbox():
         log("⚠️  AgentMail API key not configured — inbox check skipped")
         return []
     
-    # Get emails from last 24 hours
-    since = (datetime.now() - timedelta(hours=24)).isoformat()
+    # Get inbox ID (using the email as inbox_id)
+    inbox_id = AGENTMAIL_INBOX_ID
     
-    result, error = agentmail_request(f"/inbox/{AGENTMAIL_INBOX_ID}/emails?since={since}")
+    # Get recent messages
+    result, error = agentmail_request(f"/inboxes/{inbox_id}/messages")
     
     if error:
         log(f"❌ Inbox check failed: {error}")
         return []
     
-    emails = result.get('emails', [])
-    log(f"✅ Found {len(emails)} emails in inbox")
+    messages = result.get('messages', []) if isinstance(result, dict) else result
+    log(f"✅ Found {len(messages)} email(s) in inbox")
     
     # Filter for unread replies (not from Scout/Keri)
     replies = []
-    for email in emails:
-        sender = email.get('from', '').lower()
-        if 'keri' not in sender and 'thoven' not in sender and not email.get('read', False):
+    for msg in messages:
+        sender = msg.get('from', [{}])[0].get('email', '').lower() if isinstance(msg.get('from'), list) else str(msg.get('from', '')).lower()
+        is_read = msg.get('read', False)
+        
+        if 'keri' not in sender and 'thoven' not in sender and not is_read:
             replies.append({
-                'id': email.get('id'),
-                'from': email.get('from'),
-                'subject': email.get('subject'),
-                'body': email.get('body', '')[:500] + '...' if len(email.get('body', '')) > 500 else email.get('body', ''),
-                'received_at': email.get('received_at'),
-                'thread_id': email.get('thread_id')
+                'id': msg.get('message_id'),
+                'from': sender,
+                'subject': msg.get('subject'),
+                'body': msg.get('body', '')[:500] + '...' if len(msg.get('body', '')) > 500 else msg.get('body', ''),
+                'received_at': msg.get('created_at'),
+                'thread_id': msg.get('thread_id')
             })
     
     if replies:
@@ -176,25 +194,25 @@ def send_via_agentmail(to_email, subject, body, reply_to=None):
         log(f"⚠️  AgentMail API key not configured — email to {to_email} not sent")
         return False, "AGENTMAIL_API_KEY not configured", None
     
+    inbox_id = AGENTMAIL_INBOX_ID
+    
     payload = {
-        'from': AGENTMAIL_INBOX_ID,
-        'to': to_email,
+        'to': [to_email],
         'subject': subject,
-        'body': body,
-        'reply_to': reply_to or AGENTMAIL_INBOX_ID
+        'body': body
     }
     
     log(f"📤 Sending via AgentMail to: {to_email}")
     log(f"   Subject: {subject[:60]}...")
     
-    result, error = agentmail_request("/send", method="POST", data=payload)
+    result, error = agentmail_request(f"/inboxes/{inbox_id}/messages/send", method="POST", data=payload)
     
     if error:
         log(f"❌ AgentMail send failed: {error}")
         return False, error, None
     
-    email_id = result.get('email_id') or result.get('id')
-    log(f"✅ Email sent successfully (ID: {email_id})")
+    email_id = result.get('message_id') or result.get('id')
+    log(f"✅ Email sent successfully (ID: {email_id[:30]}...)")
     return True, "Sent", email_id
 
 # ==================== CORE FUNCTIONS ====================
