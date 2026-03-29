@@ -150,6 +150,13 @@ Stored in `.env` file (secured with 600 permissions):
 
 **Note:** API key is never logged or displayed. Stored in `.env` file only.
 
+### Skill Available
+Reusable workflows packaged as skill: `agentmail-outreach/`
+- SKILL.md — Workflow guide with quick start
+- scripts/send_email.py — Send emails
+- scripts/check_inbox.py — Check + classify replies
+- references/agentmail-api.md — API reference
+
 ### Cost
 | Tier | Price | Inboxes | Emails/Month | When |
 |:---|:---|:---|:---|:---|
