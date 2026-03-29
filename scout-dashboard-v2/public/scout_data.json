@@ -1,8 +1,7 @@
 {
   "metadata": {
-    "last_updated": "2026-03-30T02:38:43.696855",
-    "version": "1.1",
-    "updated_by": "scout-heartbeat"
+    "last_updated": "2026-03-30T02:44:13.413589",
+    "version": "1.0"
   },
   "prospects": [
     {
@@ -1684,9 +1683,7 @@
     "total_prospects": 150,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-30T02:16:14.776804",
-    "inbox_configured": true,
-    "last_heartbeat": "2026-03-30T02:38:43.696828"
+    "last_calculated": "2026-03-30T02:44:13.413581"
   },
   "agent_status": {
     "last_heartbeat": "2026-03-30T02:38:43.696839",
