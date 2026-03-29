@@ -1,0 +1,62 @@
+{
+  "prospects": [
+    {
+      "id": "nyc-juilliard-001",
+      "name": "Juilliard School",
+      "stage": "Replied",
+      "city": "New York",
+      "branch": "Conservatory",
+      "contact_email": "partners@juilliard.edu",
+      "source": "Research",
+      "updated_at": "2026-03-29T19:07:14.961973+00:00",
+      "created_at": "2026-03-29T19:07:14.982765+00:00",
+      "days_in_stage": 0
+    },
+    {
+      "id": "la-berklee-001",
+      "name": "Berklee College",
+      "stage": "Replied",
+      "city": "Los Angeles",
+      "branch": "College",
+      "contact_email": "la@berklee.edu",
+      "source": "Referral",
+      "created_at": "2026-03-29T19:07:14.982789+00:00",
+      "updated_at": "2026-03-29T19:07:14.982789+00:00",
+      "days_in_stage": 0
+    },
+    {
+      "id": "chi-merit-001",
+      "name": "Merit School of Music",
+      "stage": "Negotiating",
+      "city": "Chicago",
+      "branch": "School",
+      "contact_email": "info@meritmusic.org",
+      "source": "Maps",
+      "created_at": "2026-03-29T19:07:14.982798+00:00",
+      "updated_at": "2026-03-29T19:07:14.982798+00:00",
+      "days_in_stage": 0
+    },
+    {
+      "id": "mia-priv-001",
+      "name": "Miami Piano Studio",
+      "stage": "Declined",
+      "city": "Miami",
+      "branch": "Private Studio",
+      "contact_email": "teacher@example.com",
+      "source": "Research",
+      "created_at": "2026-03-29T19:07:14.982803+00:00",
+      "updated_at": "2026-03-29T19:07:14.982803+00:00",
+      "days_in_stage": 0
+    }
+  ],
+  "metadata": {
+    "last_updated": "2026-03-30T04:14:17.349372",
+    "version": "1.0"
+  },
+  "stats": {
+    "total_prospects": 4,
+    "contacted": 0,
+    "replied": 2,
+    "last_calculated": "2026-03-30T04:14:17.349358"
+  }
+}
