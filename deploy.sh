@@ -27,7 +27,7 @@ else
     echo "⚠️  API server may not be running. Check api_server.log"
 fi
 
-# Start Streamlit
-echo "🎨 Starting Streamlit app..."
-echo "Streamlit will be available at: http://localhost:8501"
+# Start Vercel
+echo "🎨 Starting Vercel app..."
+echo "Vercel will be available at: http://localhost:8501"
 streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0

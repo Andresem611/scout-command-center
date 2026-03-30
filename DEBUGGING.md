@@ -17,8 +17,8 @@ open https://github.com/Andresem611/scout-command-center/commits/main/
 **If commit NOT on GitHub** → Push failed, check local git status  
 **If commit IS on GitHub** → Continue to Step 2
 
-### Step 2: Force Streamlit Deploy (1 min)
-1. Open Streamlit Cloud dashboard
+### Step 2: Force Vercel Deploy (1 min)
+1. Open Vercel dashboard
 2. Click **"⋮"** (three dots) on your app
 3. Click **"Reboot"**
 4. Wait for "Your app is ready" (usually 30-60s)
@@ -32,7 +32,7 @@ open https://github.com/Andresem611/scout-command-center/commits/main/
 
 **If still not showing** → Continue to Step 4
 
-### Step 4: Clear Streamlit Cache (via UI)
+### Step 4: Clear Vercel Cache (via UI)
 1. Open app
 2. Click **"🔄 Refresh"** button in sidebar
 3. Or add `?clear_cache=true` to URL
@@ -45,10 +45,10 @@ Add visible test code to verify deployment:
 # In streamlit_app.py, at top of Dashboard page:
 st.markdown("<span style='color:#0f0;'>DEBUG: v1.X loaded</span>", unsafe_allow_html=True)
 ```
-Push, reboot, refresh. If you DON'T see green text → Streamlit not deploying.
+Push, reboot, refresh. If you DON'T see green text → Vercel not deploying.
 
 ### Step 6: Nuclear Option
-1. Delete app from Streamlit Cloud
+1. Delete app from Vercel
 2. Re-deploy from GitHub
 3. This fixes 99% of ghost caching issues
 
@@ -62,7 +62,7 @@ Push, reboot, refresh. If you DON'T see green text → Streamlit not deploying.
 - Stats don't match
 
 ### Root Cause
-`scout_data.json` is the single source of truth for Streamlit. Markdown pipeline files are human-readable but NOT auto-synced.
+`scout_data.json` is the single source of truth for Vercel. Markdown pipeline files are human-readable but NOT auto-synced.
 
 ### Fix
 ```bash
@@ -73,7 +73,7 @@ git commit -m "Sync pipeline data"
 git push
 ```
 
-Then reboot Streamlit app.
+Then reboot Vercel app.
 
 ---
 
@@ -86,7 +86,7 @@ Then reboot Streamlit app.
 4. `git commit -m "Descriptive message"`
 5. `git push origin main`
 6. **Wait 30 sec** for GitHub webhook
-7. Streamlit auto-deploys (check logs)
+7. Vercel auto-deploys (check logs)
 8. **Hard refresh** browser
 9. Verify change
 
@@ -96,14 +96,14 @@ Then reboot Streamlit app.
 3. `git add -A`
 4. `git commit -m "Update pipeline: +X prospects"`
 5. `git push`
-6. Reboot Streamlit app (data changes need reboot)
+6. Reboot Vercel app (data changes need reboot)
 7. Verify numbers match
 
 ### For Agent Status (heartbeat, health)
 1. Edit `heartbeat.py`
 2. Test: `python3 heartbeat.py`
 3. Commit + push
-4. **No Streamlit reboot needed** (runs on cron, not Streamlit)
+4. **No Vercel reboot needed** (runs on cron, not Vercel)
 
 ---
 
@@ -129,7 +129,7 @@ data['agent_status']['dashboard_version'] = "1.1.0"
 | Issue | Where to Check |
 |:---|:---|
 | GitHub not updating | github.com/Andresem611/scout-command-center |
-| Streamlit deploy logs | share.streamlit.io → Manage app → Logs |
+| Vercel deploy logs | share.streamlit.io → Manage app → Logs |
 | Browser cache | DevTools → Network → Disable cache |
 | Data file state | `cat scout_data.json \| python3 -m json.tool` |
 

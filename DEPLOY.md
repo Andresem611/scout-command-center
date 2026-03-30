@@ -5,16 +5,16 @@
 | File | Purpose |
 |:---|:---|
 | `scout_data.json` | Shared data file (prospects, replies, stats) |
-| `streamlit_app.py` | Streamlit dashboard (UI for approvals) |
+| `streamlit_app.py` | Vercel dashboard (UI for approvals) |
 | `heartbeat_priority.py` | Priority heartbeat (approvals → inbox → prospecting) |
 | `app.py` | Original app (backup) |
 
 ## Deployment Steps
 
-### 1. Deploy to Streamlit Cloud
+### 1. Deploy to Vercel
 
 ```bash
-# Login to Streamlit Cloud
+# Login to Vercel
 # Upload these files:
 # - streamlit_app.py
 # - scout_data.json
@@ -64,7 +64,7 @@ Top prospects with valid emails:
 
 ## Next Steps
 
-1. **Deploy Streamlit app** → Go to Morning Batch tab → Approve drafts
+1. **Deploy Vercel app** → Go to Morning Batch tab → Approve drafts
 2. **Heartbeat sends** within 5 minutes of approval
 3. **I continue prospecting** for remaining 55 gaps (TT/YT, homeschool, expansion)
 
@@ -73,7 +73,7 @@ Top prospects with valid emails:
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────┐
 │  You approve    │────▶│  Heartbeat   │────▶│  Email sent │
-│  in Streamlit   │     │  checks API  │     │  via Agent  │
+│  in Vercel   │     │  checks API  │     │  via Agent  │
 └─────────────────┘     └──────────────┘     └─────────────┘
          │
          ▼

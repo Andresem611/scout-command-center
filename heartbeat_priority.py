@@ -233,7 +233,7 @@ def run_heartbeat():
     save_data(data)
     
     if deploy_result.get('deployed'):
-        log("🌐 Streamlit Cloud will update in ~2 minutes", "deploy")
+        log("🌐 Vercel will update in ~2 minutes", "deploy")
     
     log("="*60)
     
