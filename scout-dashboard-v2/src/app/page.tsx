@@ -28,13 +28,11 @@ interface Stats {
   activePartners: number;
 }
 
+// Updated to match actual data structure from scout_data.json
 const BRANCH_TARGETS: BranchTarget[] = [
-  { name: "Mom Influencers (IG)", target: 30, current: 0, cities: "NYC, Miami, LA, SF, Houston, Dallas, Austin, Chicago" },
-  { name: "Mom Influencers (TikTok/YouTube)", target: 15, current: 0, cities: "Same cities" },
-  { name: "Mom Blogs", target: 15, current: 0, cities: "Same cities" },
-  { name: "Homeschool Influencers (AZ)", target: 15, current: 0, cities: "Phoenix, Tucson, Scottsdale" },
-  { name: "Homeschool Blogs (AZ)", target: 10, current: 0, cities: "Arizona statewide" },
-  { name: "Homeschool Expansion", target: 10, current: 0, cities: "Florida, Utah, Texas" },
+  { name: "Mom Influencers", target: 95, current: 0, cities: "NYC, Miami, LA, SF, Houston, Dallas, Austin, Chicago" },
+  { name: "Mom Blog", target: 15, current: 0, cities: "Same cities" },
+  { name: "Homeschool", target: 35, current: 0, cities: "AZ, FL, UT, TX" },
 ];
 
 const EMAIL_TEMPLATE = `Hi [name],
@@ -144,13 +142,19 @@ export default function Dashboard() {
         total: prospects.length,
         contacted,
         replied,
-        activePartners: 1
+        activePartners: prospects.filter((p: any) => p.stage === 'Partner').length || 1
       });
 
-      // Update branch counts
+      // Update branch counts - match exact branch names from data
+      const branchCounts: Record<string, number> = {};
+      prospects.forEach((p: any) => {
+        const branch = p.branch || 'Unknown';
+        branchCounts[branch] = (branchCounts[branch] || 0) + 1;
+      });
+
       const updatedBranches = BRANCH_TARGETS.map(branch => ({
         ...branch,
-        current: prospects.filter((p: any) => p.branch === branch.name).length
+        current: branchCounts[branch.name] || 0
       }));
       setBranches(updatedBranches);
     } catch (error) {
@@ -217,7 +221,7 @@ export default function Dashboard() {
             <p className="text-gray-400 mt-1">
               Last seen:{" "}
               <span className={agentStatus ? getStatusColor(agentStatus.status).split(" ")[0] : "text-gray-400"}>
-                {agentStatus ? timeSince(agentStatus.lastHeartbeat) : "—"}
+                {agentStatus?.lastHeartbeat ? timeSince(agentStatus.lastHeartbeat) : "—"}
               </span>
             </p>
           </div>
@@ -230,10 +234,10 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <StatCard title="Total Pipeline" value={stats.total.toString()} subtitle="of 95 target" color="green" />
+        <StatCard title="Total Pipeline" value={stats.total.toString()} subtitle="of 145 target" color="green" />
         <StatCard title="Contacted" value={stats.contacted.toString()} subtitle="outreach sent" color="blue" />
         <StatCard title="Reply Rate" value={stats.contacted > 0 ? `${Math.round((stats.replied / stats.contacted) * 100)}%` : "0%"} subtitle={`${stats.replied} replies`} color="yellow" />
-        <StatCard title="Active Partners" value={stats.activePartners.toString()} subtitle="Audrey Mora" color="purple" />
+        <StatCard title="Active Partners" value={stats.activePartners.toString()} subtitle={stats.activePartners > 1 ? "Multiple partners" : "Audrey Mora"} color="purple" />
       </div>
 
       <div className="grid grid-cols-2 gap-6">
