@@ -105,6 +105,52 @@ def update_agent_status(data, status="active", current_task="", error=None):
     data['agent_status'] = agent_status
     return data
 
+def commit_and_push():
+    """Auto-commit data changes and push to GitHub for Vercel deployment"""
+    try:
+        import subprocess
+        import os
+        
+        workspace = "/root/.openclaw/workspace"
+        os.chdir(workspace)
+        
+        # Check if there are changes to commit
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            cwd=workspace
+        )
+        
+        if not result.stdout.strip():
+            return  # No changes to commit
+        
+        # Stage data file changes
+        subprocess.run(
+            ["git", "add", "scout-dashboard-v2/public/scout_data.json", "data/scout_data.json"],
+            capture_output=True,
+            cwd=workspace
+        )
+        
+        # Commit with timestamp
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        subprocess.run(
+            ["git", "commit", "-m", f"Auto: Heartbeat data update {timestamp}"],
+            capture_output=True,
+            cwd=workspace
+        )
+        
+        # Push to GitHub
+        subprocess.run(
+            ["git", "push", "origin", "main"],
+            capture_output=True,
+            cwd=workspace
+        )
+        
+        log("🚀 Data synced to GitHub → Vercel will update")
+    except Exception as e:
+        log(f"⚠️  Git push failed: {e}")
+
 # ==================== AGENTMAIL API FUNCTIONS ====================
 
 def agentmail_request(endpoint, method="GET", data=None):
@@ -370,6 +416,9 @@ def main():
     # Final status
     data = update_agent_status(data, status="idle", current_task="Waiting for next check")
     save_data(data)
+    
+    # Auto-commit and push data changes to GitHub for Vercel deployment
+    commit_and_push()
     
     # ==================== SUMMARY ====================
     log("\n" + "="*60)
