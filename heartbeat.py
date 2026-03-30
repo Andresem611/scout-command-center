@@ -393,15 +393,28 @@ def main():
     
     # ==================== TASK 3: PROSPECTING CHECK ====================
     log("\n📋 TASK 3: Prospecting Check")
-    total_prospects = len(data.get('prospects', []))
-    target = 95
     
-    if total_prospects >= target:
-        log(f"✅ Pipeline full: {total_prospects}/{target} prospects — no prospecting needed")
+    # Import and use branch gap analyzer
+    import sys
+    sys.path.insert(0, '/root/.openclaw/workspace/skills/scout-pipeline/scripts')
+    from analyze_gaps import analyze_branch_gaps, get_next_prospecting_target
+    
+    analysis = analyze_branch_gaps(DATA_FILE)
+    next_action = get_next_prospecting_target(analysis)
+    
+    if next_action['action'] == 'none':
+        log(f"✅ All branches at target — no prospecting needed")
     else:
-        gap = target - total_prospects
-        log(f"📉 Pipeline gap: {gap} prospects needed")
-        log(f"   Next action: Identify weakest branch and prospect")
+        log(f"📉 Branch gap found: {next_action['reason']}")
+        if next_action['action'] == 'prospect_branch':
+            log(f"   → Should prospect: {next_action['target_count']} {next_action['branch']} prospects")
+        elif next_action['action'] == 'prospect_city':
+            log(f"   → Should prospect: {next_action['city']} (under-represented)")
+    
+    # Legacy total check for backward compatibility
+    total_prospects = len(data.get('prospects', []))
+    if total_prospects >= 95:
+        log(f"   (Total pipeline: {total_prospects}/95 minimum)")
     
     # ==================== TASK 4: UPDATE STATS ====================
     log("\n📋 TASK 4: Update Stats")
