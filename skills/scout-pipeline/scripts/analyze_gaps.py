@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
 Branch Gap Analyzer - Identifies which pipeline branches need prospecting
+AGENTS.md Skill: skill-pipeline/scripts/analyze_gaps.py
 """
 
 import json
+import sys
 from typing import Dict, List, Tuple
 
 # Branch targets as defined in pipeline strategy
@@ -89,7 +91,7 @@ def analyze_branch_gaps(data_file: str = "/root/.openclaw/workspace/scout-dashbo
     }
 
 def get_next_prospecting_target(analysis: Dict) -> Dict:
-    """Determine what to prospect next based on gaps"""
+    """Determine what to prospect next based on gaps (per AGENTS.md routing)"""
     
     weakest = analysis.get("weakest_branch")
     if weakest:
@@ -116,33 +118,49 @@ def get_next_prospecting_target(analysis: Dict) -> Dict:
         "reason": "All branches at target, no prospecting needed"
     }
 
-if __name__ == "__main__":
+def print_json_output(analysis: Dict, next_action: Dict):
+    """Print machine-readable JSON output for skill dispatch"""
+    print(f"ANALYSIS:{json.dumps(analysis)}")
+    print(f"NEXT_ACTION:{json.dumps(next_action)}")
+
+def main():
+    # Check for --json flag
+    json_mode = "--json" in sys.argv
+    
     analysis = analyze_branch_gaps()
-    
-    print("=" * 60)
-    print("PIPELINE BRANCH ANALYSIS")
-    print("=" * 60)
-    print(f"\nTotal Prospects: {analysis['total_prospects']}")
-    print(f"Overall Status: {analysis['overall_status']}")
-    
-    print("\n--- Branch Gaps ---")
-    for branch in analysis["branch_analysis"]:
-        status = "🔴 NEEDS WORK" if branch["needs_work"] else "✅ OK"
-        print(f"{branch['branch']}: {branch['current']}/{branch['target']} ({branch['percentage']:.0f}%) {status}")
-        if branch["needs_work"]:
-            print(f"   → Gap: {branch['gap']} prospects needed")
-    
-    if analysis["city_issues"]:
-        print("\n--- City Distribution Issues ---")
-        for issue in analysis["city_issues"]:
-            print(f"{issue['city']}: {issue['count']} ({issue['percentage']:.1f}%) - {issue['issue']}")
-    
-    print("\n--- Next Action ---")
     next_action = get_next_prospecting_target(analysis)
-    print(f"Action: {next_action['action']}")
-    print(f"Reason: {next_action['reason']}")
-    if next_action['action'] != 'none':
-        if 'branch' in next_action:
-            print(f"Target: {next_action['branch']}")
-        if 'city' in next_action:
-            print(f"City: {next_action['city']}")
+    
+    if json_mode:
+        # Machine-readable output for AGENTS.md routing
+        print_json_output(analysis, next_action)
+    else:
+        # Human-readable output
+        print("=" * 60)
+        print("PIPELINE BRANCH ANALYSIS")
+        print("=" * 60)
+        print(f"\nTotal Prospects: {analysis['total_prospects']}")
+        print(f"Overall Status: {analysis['overall_status']}")
+        
+        print("\n--- Branch Gaps ---")
+        for branch in analysis["branch_analysis"]:
+            status = "🔴 NEEDS WORK" if branch["needs_work"] else "✅ OK"
+            print(f"{branch['branch']}: {branch['current']}/{branch['target']} ({branch['percentage']:.0f}%) {status}")
+            if branch["needs_work"]:
+                print(f"   → Gap: {branch['gap']} prospects needed")
+        
+        if analysis["city_issues"]:
+            print("\n--- City Distribution Issues ---")
+            for issue in analysis["city_issues"]:
+                print(f"{issue['city']}: {issue['count']} ({issue['percentage']:.1f}%) - {issue['issue']}")
+        
+        print("\n--- Next Action ---")
+        print(f"Action: {next_action['action']}")
+        print(f"Reason: {next_action['reason']}")
+        if next_action['action'] != 'none':
+            if 'branch' in next_action:
+                print(f"Target: {next_action['branch']}")
+            if 'city' in next_action:
+                print(f"City: {next_action['city']}")
+
+if __name__ == "__main__":
+    main()

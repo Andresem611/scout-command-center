@@ -391,25 +391,69 @@ def main():
     else:
         log("✅ No approved drafts waiting")
     
-    # ==================== TASK 3: PROSPECTING CHECK ====================
-    log("\n📋 TASK 3: Prospecting Check")
+    # ==================== TASK 3: PIPELINE GAP CHECK (via AGENTS.md routing) ====================
+    log("\n📋 TASK 3: Pipeline Gap Check")
+    log("   Following AGENTS.md dispatch: skill-pipeline/scripts/analyze_gaps.py")
     
-    # Import and use branch gap analyzer
-    import sys
-    sys.path.insert(0, '/root/.openclaw/workspace/skills/scout-pipeline/scripts')
-    from analyze_gaps import analyze_branch_gaps, get_next_prospecting_target
+    # Call analyze_gaps.py as a skill script per AGENTS.md dispatch table
+    # AGENTS.md decision logic: CHECK Pipeline gaps? → Dispatch skill-pipeline/analyze_gaps.py
+    import subprocess
     
-    analysis = analyze_branch_gaps(DATA_FILE)
-    next_action = get_next_prospecting_target(analysis)
+    skill_script = "/root/.openclaw/workspace/skills/scout-pipeline/scripts/analyze_gaps.py"
+    next_action = {"action": "none", "reason": "Skill execution failed"}
     
-    if next_action['action'] == 'none':
-        log(f"✅ All branches at target — no prospecting needed")
+    try:
+        result = subprocess.run(
+            ["python3", skill_script, "--json"],
+            capture_output=True,
+            text=True,
+            cwd="/root/.openclaw/workspace",
+            timeout=30
+        )
+        
+        if result.returncode == 0:
+            # Parse JSON output from skill
+            for line in result.stdout.strip().split('\n'):
+                if line.startswith('NEXT_ACTION:'):
+                    try:
+                        next_action = json.loads(line.replace('NEXT_ACTION:', '').strip())
+                    except json.JSONDecodeError:
+                        pass
+            
+            # Also parse the analysis for logging
+            for line in result.stdout.strip().split('\n'):
+                if line.startswith('ANALYSIS:'):
+                    try:
+                        analysis = json.loads(line.replace('ANALYSIS:', '').strip())
+                        log(f"   Total prospects: {analysis.get('total_prospects', 'N/A')}")
+                        log(f"   Overall status: {analysis.get('overall_status', 'N/A')}")
+                        
+                        # Show branch gaps
+                        for branch in analysis.get('branch_analysis', []):
+                            if branch.get('needs_work'):
+                                log(f"   📉 {branch['branch']}: {branch['current']}/{branch['target']} (gap: {branch['gap']})")
+                    except json.JSONDecodeError:
+                        pass
+        else:
+            log(f"   ⚠️ Gap analysis failed: {result.stderr[:200]}")
+            
+    except subprocess.TimeoutExpired:
+        log("   ⚠️ Gap analysis timed out")
+    except Exception as e:
+        log(f"   ⚠️ Gap analysis error: {e}")
+    
+    # AGENTS.md routing decision based on skill output
+    # Decision tree from AGENTS.md: Pipeline gaps? → Branch below target? → Prospect
+    if next_action['action'] == 'prospect_branch':
+        log(f"   → AGENTS.md routing: Dispatch skill-prospecting for {next_action['branch']}")
+        log(f"     Target: {next_action['target_count']} prospects")
+        # In future: subprocess.run(["python3", "skills/scout-prospecting/scripts/search_influencers.py", ...])
+    elif next_action['action'] == 'prospect_city':
+        log(f"   → AGENTS.md routing: Dispatch skill-prospecting for city {next_action['city']}")
+        # In future: subprocess.run(["python3", "skills/scout-prospecting/scripts/search_influencers.py", ...])
     else:
-        log(f"📉 Branch gap found: {next_action['reason']}")
-        if next_action['action'] == 'prospect_branch':
-            log(f"   → Should prospect: {next_action['target_count']} {next_action['branch']} prospects")
-        elif next_action['action'] == 'prospect_city':
-            log(f"   → Should prospect: {next_action['city']} (under-represented)")
+        log(f"   ✅ All branches at target — no prospecting needed")
+        log(f"     ({next_action.get('reason', 'No action required')})")
     
     # Legacy total check for backward compatibility
     total_prospects = len(data.get('prospects', []))
