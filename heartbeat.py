@@ -257,12 +257,12 @@ def main():
     
     data = load_data()
     
-    # Check if AgentMail is configured
+    # Check AgentMail configuration
     agentmail_ready = bool(AGENTMAIL_API_KEY)
     if agentmail_ready:
-        log(f"✅ AgentMail configured: {AGENTMAIL_INBOX_ID}")
+        log(f"✅ AgentMail active: {AGENTMAIL_INBOX_ID}")
     else:
-        log(f"⚠️  AgentMail not configured — set AGENTMAIL_API_KEY env var")
+        log(f"⚠️  AgentMail API key not found — check .env file")
     
     # Update agent status
     data = update_agent_status(data, status="active", current_task="Starting heartbeat cycle")
@@ -341,7 +341,7 @@ def main():
         log(f"✅ Updated draft queue with send results")
         
     elif approved and not agentmail_ready:
-        log(f"⏸️  {len(approved)} drafts approved but AgentMail not configured — cannot send")
+        log(f"⏸️  {len(approved)} drafts approved but API key missing — cannot send")
     else:
         log("✅ No approved drafts waiting")
     

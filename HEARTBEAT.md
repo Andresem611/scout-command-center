@@ -17,24 +17,21 @@
 
 ### 1. INBOX CHECK (2 min)
 ```
-IF AgentMail configured:
-  Check keri@agentmail.to
-  Classify: INTERESTED | QUESTIONS | RATES | DECLINED | OOO | SPAM
-  
-  IF INTERESTED or QUESTIONS or RATES:
-    ALERT immediately to chat + email keri@thoven.co
-    Draft response (don't send)
-    Add to playbook: situation + prospect details
-  
-  IF DECLINED:
-    Update prospect stage to "Declined"
-    Draft polite thank you
-    Add to playbook: why declined (if clear)
-  
-  IF OOO or SPAM:
-    Log silently, no alert
-ELSE:
-  Log: "Inbox check skipped — AgentMail not configured"
+Check keri@agentmail.to via API
+Classify: INTERESTED | QUESTIONS | RATES | DECLINED | OOO | SPAM
+
+IF INTERESTED or QUESTIONS or RATES:
+  ALERT immediately to chat
+  Draft response (don't send)
+  Add to playbook: situation + prospect details
+
+IF DECLINED:
+  Update prospect stage to "Declined"
+  Draft polite thank you
+  Add to playbook: why declined (if clear)
+
+IF OOO or SPAM:
+  Log silently, no alert
 ```
 
 ### 2. APPROVALS QUEUE (1 min)
