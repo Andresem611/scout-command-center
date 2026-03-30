@@ -117,8 +117,23 @@ def send_email(prospect):
 def task_check_inbox():
     """Check AgentMail inbox for replies"""
     log("📥 TASK 2: Checking inbox...")
-    log("📥 Inbox check: AgentMail API not yet configured")
-    return {"new_replies": 0, "action": "none"}
+    
+    # Import and use actual heartbeat functions
+    import sys
+    sys.path.insert(0, '/root/.openclaw/workspace')
+    from heartbeat import AGENTMAIL_API_KEY, check_inbox as real_check_inbox
+    
+    if not AGENTMAIL_API_KEY:
+        log("⚠️  AgentMail API key not found — check .env file")
+        return {"new_replies": 0, "action": "none"}
+    
+    replies = real_check_inbox()
+    if replies:
+        log(f"🚨 Found {len(replies)} new reply(s)!")
+        return {"new_replies": len(replies), "action": "alert"}
+    else:
+        log("✅ No new replies")
+        return {"new_replies": 0, "action": "none"}
 
 # ============ TASK 3: PROSPECTING ============
 

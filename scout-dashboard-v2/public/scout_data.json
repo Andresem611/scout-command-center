@@ -5098,13 +5098,39 @@
     }
   ],
   "metadata": {
-    "last_updated": "2026-03-30T09:44:08.714441",
-    "version": "1.0"
+    "last_updated": "2026-03-30T10:38:09.065243",
+    "version": "1.1",
+    "updated_by": "scout-heartbeat"
   },
   "stats": {
     "total_prospects": 364,
     "contacted": 0,
     "replied": 0,
-    "last_calculated": "2026-03-30T09:44:08.714432"
+    "last_calculated": "2026-03-30T10:14:28.187907",
+    "inbox_configured": true,
+    "last_heartbeat": "2026-03-30T10:38:09.065223"
+  },
+  "agent_status": {
+    "last_heartbeat": "2026-03-30T10:38:09.065230",
+    "status": "idle",
+    "current_task": "Waiting for next check",
+    "session_uptime": "2026-03-30T10:38:09.065232",
+    "dashboard_version": "1.1.0",
+    "health_checks": {
+      "2026-03-30": {
+        "checked_at": "2026-03-30T10:38:08.785863",
+        "status": "healthy"
+      }
+    },
+    "activity_log": [
+      {
+        "time": "2026-03-30T10:38:09.065239",
+        "task": "Waiting for next check"
+      },
+      {
+        "time": "2026-03-30T10:38:08.785869",
+        "task": "Starting heartbeat cycle"
+      }
+    ]
   }
 }
