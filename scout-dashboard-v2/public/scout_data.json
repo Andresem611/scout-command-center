@@ -5266,7 +5266,7 @@
     }
   ],
   "metadata": {
-    "last_updated": "2026-04-17T17:00:02.254324",
+    "last_updated": "2026-04-17T17:25:26.023127",
     "version": "1.1",
     "updated_by": "scout-heartbeat"
   },
@@ -5299,13 +5299,13 @@
     "replied": 0,
     "last_calculated": "2026-03-30T23:49:43.854377",
     "inbox_configured": true,
-    "last_heartbeat": "2026-04-17T17:00:02.254301"
+    "last_heartbeat": "2026-04-17T17:25:26.023104"
   },
   "agent_status": {
-    "last_heartbeat": "2026-04-17T17:00:02.254310",
+    "last_heartbeat": "2026-04-17T17:25:26.023112",
     "status": "idle",
     "current_task": "Waiting for next check",
-    "session_uptime": "2026-04-17T17:00:02.254312",
+    "session_uptime": "2026-04-17T17:25:26.023115",
     "dashboard_version": "1.1.0",
     "health_checks": {
       "2026-03-31": {
@@ -5382,6 +5382,14 @@
       }
     },
     "activity_log": [
+      {
+        "time": "2026-04-17T17:25:26.023122",
+        "task": "Waiting for next check"
+      },
+      {
+        "time": "2026-04-17T17:25:24.993155",
+        "task": "Starting heartbeat cycle"
+      },
       {
         "time": "2026-04-17T17:00:02.254319",
         "task": "Waiting for next check"
@@ -5572,14 +5580,6 @@
       },
       {
         "time": "2026-04-17T09:20:20.031147",
-        "task": "Starting heartbeat cycle"
-      },
-      {
-        "time": "2026-04-17T09:00:02.949266",
-        "task": "Waiting for next check"
-      },
-      {
-        "time": "2026-04-17T09:00:01.867413",
         "task": "Starting heartbeat cycle"
       }
     ]
